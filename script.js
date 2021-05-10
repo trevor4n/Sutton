@@ -17,7 +17,6 @@ let inputPhase = false
 sb.addEventListener('click', () => suttonButton())
 
 for(let i = 0; i < pads.length; i++){
-    //pads[i].addEventListener('click', () => padIn(pads[i]))
     pads[i].addEventListener('click', () => padIn(event.currentTarget))
     padCount++
 }
@@ -32,12 +31,13 @@ function suttonButton(){
 
     if(state == 'landing'){
         setHighScore(0)
-        //TODO - make streak & high score visible
+        //+ make streak & high score visible
         document.querySelectorAll('.info').forEach((inf) => {
-            console.log(`make visible... ${inf.id} classList: ${document.getElementById('highScore').classList}`)
+            //console.log(`make visible... ${inf.id} classList: ${document.getElementById('highScore').classList}`)
             inf.style.visibility = "visible"
             //inf.classList.remove("invisible")
-            console.log(`made visible???? ${inf.id} classList: ${document.getElementById('highScore').classList}`)
+            //inf.style.display = "unset"
+            //console.log(`made visible???? ${inf.id} classList: ${document.getElementById('highScore').classList}`)
         })
         state = 'game-sequence'
     }
@@ -51,7 +51,7 @@ async function gameSequence(){
     //gameSeq.from({length: 99}, () => Math.floor(Math.random() * 4))
 
     for(let g of gameSeq){
-        console.log('next game sequence pad to show: ' + 'p'+g)
+        //console.log('next game sequence pad to show: ' + 'p'+g)
         let active = await suttonShow(document.getElementById('p'+g))
         console.log(active)
     }
@@ -66,11 +66,11 @@ function padIn(p){
         let l = playerSeq.length
         if(playerSeq[l-1] == gameSeq[l-1]){ //if the user enters a correct sequence element
             console.log('Player pad match')
-            score++
-            setStreak(score)
+            score = l
             if(l == gameSeq.length){//If the user is finished entering their sequence don't let them enter any extra
-                inputPhase = false
+                //inputPhase = false //FIX - commenting this out b/c if a user quickly enters the correct sequence, they will block themselves from surpassing their previous streak
                 console.log('Player sequence match')
+                setStreak(score)
                 gameSequence()
             }
         }else{ //user entered incorrect pad pattern
@@ -85,6 +85,7 @@ function gameOver(p){
     sb.innerText = 'Play\nAgain'
     p.innerText = `Sutton said ${document.getElementById('p'+gameSeq[playerSeq.length-1]).style.backgroundColor}...\ngame over`
     if(score > hs){
+        document.getElementById('highScore').style.display = "unset"
         setHighScore(score)
         //STRETCH - put a new bubble on the high score and clear it when the next game starts
     }
@@ -95,12 +96,13 @@ function gameOver(p){
 }
 
 function suttonShow(p){
-    ///console.log(`starting suttonShow for button ${g}`)
+    //console.log(`starting suttonShow for button ${g}`)
     return new Promise(resolve => {
+        console.log(p)
         p.classList.add("bright") //pad immediately flashes white
         setTimeout(() => { //after 0.75sec the pad resets
             p.classList.remove("bright") //TODO - increase the luminosity of the pressed pad
-            setTimeout(() => {resolve('shown')},250) //after 0.25sec promise is returned, leaving enough time to differentiate between pads sequentially lighting up
+            setTimeout(() => {resolve('pad shown')},250) //after 0.25sec promise is returned, leaving enough time to differentiate between pads sequentially lighting up
             //console.log('shown  promise is complete')
         }, 750)
     })
@@ -111,5 +113,6 @@ function setStreak(s){
 }
 
 function setHighScore(s){
+    hs = s
     highScore.innerText = `High Score\n${s}`
 }
