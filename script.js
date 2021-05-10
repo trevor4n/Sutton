@@ -45,13 +45,10 @@ function suttonButton(){
 }
 
 async function gameSequence(){
+    inputPhase = false
     gameSeq.push(Math.floor(Math.random() * padCount))
     console.log(`Game Sequence: ${gameSeq}`)
-    //STRETCH - consider generating a random array of values before gameplay starts to avoid a delay between a successful pad push and the next prompt running
-    //gameSeq.from({length: 99}, () => Math.floor(Math.random() * 4))
-
     for(let g of gameSeq){
-        //console.log('next game sequence pad to show: ' + 'p'+g)
         let active = await suttonShow(document.getElementById('p'+g))
         console.log(active)
     }
@@ -67,8 +64,9 @@ function padIn(p){
         if(playerSeq[l-1] == gameSeq[l-1]){ //if the user enters a correct sequence element
             console.log('Player pad match')
             score = l
-            if(l == gameSeq.length){//If the user is finished entering their sequence don't let them enter any extra
-                //inputPhase = false //FIX - commenting this out b/c if a user quickly enters the correct sequence, they will block themselves from surpassing their previous streak
+            if(l == gameSeq.length){
+                //inputPhase = false //If the user is finished entering the sequence don't let them overflow
+                //+ if a user quickly enters the sequence, ^ will block their next padIn call of the streak... moved line just before game sequence is shown
                 console.log('Player sequence match')
                 setStreak(score)
                 gameSequence()
@@ -81,13 +79,13 @@ function padIn(p){
     }
 }
 
-function gameOver(p){
+function gameOver(p){ //TODO - verify if a win condition after a magic number of rounds is required OR if posting a new high score counts OR if playing until the user loses is acceptable
     sb.innerText = 'Play\nAgain'
-    p.innerText = `Sutton said ${document.getElementById('p'+gameSeq[playerSeq.length-1]).style.backgroundColor}...\ngame over`
+    p.innerText = `Sutton said ${document.getElementById('p'+gameSeq[playerSeq.length-1]).style.backgroundColor}...\ngame over` //TODO - fix game over condition that displays text on multiple pads
     if(score > hs){
         document.getElementById('highScore').style.display = "unset"
         setHighScore(score)
-        //STRETCH - put a new bubble on the high score and clear it when the next game starts
+        //STRETCH - put a high score bubble on streak
     }
     setTimeout(() => {
         p.innerText = ''
@@ -96,14 +94,12 @@ function gameOver(p){
 }
 
 function suttonShow(p){
-    //console.log(`starting suttonShow for button ${g}`)
     return new Promise(resolve => {
-        console.log(p)
+        //console.log(p)
         p.classList.add("bright") //pad immediately flashes white
         setTimeout(() => { //after 0.75sec the pad resets
-            p.classList.remove("bright") //TODO - increase the luminosity of the pressed pad
+            p.classList.remove("bright") //TODO - increase the luminosity of the pressed pad instead of changing the background color
             setTimeout(() => {resolve('pad shown')},250) //after 0.25sec promise is returned, leaving enough time to differentiate between pads sequentially lighting up
-            //console.log('shown  promise is complete')
         }, 750)
     })
 }
