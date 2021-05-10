@@ -60,14 +60,8 @@ async function gameSequence(){
         let solid = await suttonSolid
         console.log(solid)
     }
-    playerSequence()
-}
-
-function playerSequence(){
     playerSeq = []
     inputPhase = true //STRETCH - phase out  this connditional entirely (possibly by disabling the pad buttons)
-   //let validatedSeq = 0
-    gameSequence()
 }
 
 function padIn(p){
@@ -82,6 +76,7 @@ function padIn(p){
             if(l == gameSeq.length){//If the user is finished entering their sequence don't let them enter any extra
                 inputPhase = false
                 console.log('Player sequence match')
+                gameSequence()
             }
         }else{ //user entered incorrect pad pattern
             console.log('Player pad mismatch')
