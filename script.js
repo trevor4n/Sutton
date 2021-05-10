@@ -1,4 +1,3 @@
-//console.log('attached')
 let streak = document.getElementById('streak')
 let highScore = document.getElementById('highScore')
 let pads = document.getElementsByClassName('pad')
@@ -27,7 +26,7 @@ function suttonButton(){
     sb.disabled = true
     score = 0
     setStreak(score)
-    suttonSolid()
+    //suttonSolid()
     gameSeq = []
     sb.innerText = 'Sutton\nSays!'
 
@@ -52,13 +51,9 @@ async function gameSequence(){
     //gameSeq.from({length: 99}, () => Math.floor(Math.random() * 4))
 
     for(let g of gameSeq){
-        // setTimeout(suttonShow(g), 750)
-        // setTimeout(suttonSolid, 250)
         console.log('next game sequence pad to show: ' + 'p'+g)
         let active = await suttonShow(document.getElementById('p'+g))
         console.log(active)
-        let solid = await suttonSolid
-        console.log(solid)
     }
     playerSeq = []
     inputPhase = true //STRETCH - phase out  this connditional entirely (possibly by disabling the pad buttons)
@@ -88,30 +83,27 @@ function padIn(p){
 
 function gameOver(p){
     sb.innerText = 'Play\nAgain'
-    p.innerText = `Sutton said ${document.getElementById(gameSeq[playerSeq.length-1])}...\ngame over` //TODO - access the color of the element
+    p.innerText = `Sutton said ${document.getElementById('p'+gameSeq[playerSeq.length-1]).style.backgroundColor}...\ngame over`
     if(score > hs){
         setHighScore(score)
         //STRETCH - put a new bubble on the high score and clear it when the next game starts
     }
-    setTimeout(() => {sb.disabled = false}, 1000)
+    setTimeout(() => {
+        p.innerText = ''
+        sb.disabled = false
+    }, 5000)
 }
 
-function suttonShow(p){ //param g should be a pad div
-    //TODO - fade 3 pads & brighten the next in the pattern
-    //pads[g]
+function suttonShow(p){
     ///console.log(`starting suttonShow for button ${g}`)
     return new Promise(resolve => {
         p.classList.add("bright") //pad immediately flashes white
         setTimeout(() => { //after 0.75sec the pad resets
-            p.classList.remove("bright")
+            p.classList.remove("bright") //TODO - increase the luminosity of the pressed pad
             setTimeout(() => {resolve('shown')},250) //after 0.25sec promise is returned, leaving enough time to differentiate between pads sequentially lighting up
             //console.log('shown  promise is complete')
         }, 750)
     })
-}
-
-function suttonSolid(){
-    //TODO - since suttonShow resets pad brightness now, prepare a function to highlight pads during the winn/loss condition and display text for a time
 }
 
 function setStreak(s){
