@@ -34,12 +34,12 @@ function suttonButton(){
     if(state == 'landing'){
         setHighScore(0)
         //TODO - make streak & high score visible
-        document.querySelectorAll('.info')
-        //info.forEach((inf) => {console.log(`here ${inf}`); inf.style.visibility = 'visible'})
-        ///let info = document.getElementById('highScore').style.visibility = "visible"
-        //console.log(`here: ${document.getElementById('highScore').classList}`)
-        document.getElementById('highScore').classList.remove("invisible")
-        //console.log(`here: ${document.getElementById('highScore').classList}`)
+        document.querySelectorAll('.info').forEach((inf) => {
+            console.log(`make visible... ${inf.id} classList: ${document.getElementById('highScore').classList}`)
+            inf.style.visibility = "visible"
+            //inf.classList.remove("invisible")
+            console.log(`made visible???? ${inf.id} classList: ${document.getElementById('highScore').classList}`)
+        })
         state = 'game-sequence'
     }
     gameSequence()
