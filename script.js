@@ -26,15 +26,15 @@ for(let i = 0; i < pads.length; i++){
 function suttonButton(){
     sb.disabled = true
     score = 0
-    updateStreak(score)
+    setStreak(score)
     suttonSolid()
     gameSeq = []
     sb.innerText = 'Sutton\nSays!'
 
     if(state == 'landing'){
-        updateHighScore(0)
+        setHighScore(0)
         //TODO - make streak & high score visible
-        //let info = document.querySelectorAll('.info')
+        document.querySelectorAll('.info')
         //info.forEach((inf) => {console.log(`here ${inf}`); inf.style.visibility = 'visible'})
         ///let info = document.getElementById('highScore').style.visibility = "visible"
         //console.log(`here: ${document.getElementById('highScore').classList}`)
@@ -72,7 +72,7 @@ function padIn(p){
         if(playerSeq[l-1] == gameSeq[l-1]){ //if the user enters a correct sequence element
             console.log('Player pad match')
             score++
-            updateStreak(score)
+            setStreak(score)
             if(l == gameSeq.length){//If the user is finished entering their sequence don't let them enter any extra
                 inputPhase = false
                 console.log('Player sequence match')
@@ -90,7 +90,7 @@ function gameOver(p){
     sb.innerText = 'Play\nAgain'
     p.innerText = `Sutton said ${document.getElementById(gameSeq[playerSeq.length-1])}...\ngame over` //TODO - access the color of the element
     if(score > hs){
-        updateHighScore(score)
+        setHighScore(score)
         //STRETCH - put a new bubble on the high score and clear it when the next game starts
     }
     setTimeout(() => {sb.disabled = false}, 1000)
@@ -114,10 +114,10 @@ function suttonSolid(){
     //TODO - since suttonShow resets pad brightness now, prepare a function to highlight pads during the winn/loss condition and display text for a time
 }
 
-function updateStreak(s){
+function setStreak(s){
     streak.innerText = `Streak\n${s}`
 }
 
-function updateHighScore(s){
+function setHighScore(s){
     highScore.innerText = `High Score\n${s}`
 }
