@@ -22,6 +22,8 @@ for(let i = 0; i < pads.length; i++){
 }
 
 function suttonButton(){
+    if(state == 'game-sequence') 
+        return
     sb.disabled = true
     score = 0
     setStreak(score)
@@ -63,11 +65,11 @@ function padIn(p){
         let l = playerSeq.length
         if(playerSeq[l-1] == gameSeq[l-1]){ //if the user enters a correct sequence element
             console.log('Player pad match')
-            score = l
             if(l == gameSeq.length){
                 //inputPhase = false //If the user is finished entering the sequence don't let them overflow
                 //+ if a user quickly enters the sequence, ^ will block their next padIn call of the streak... moved line just before game sequence is shown
                 console.log('Player sequence match')
+                score = l
                 setStreak(score)
                 gameSequence()
             }
@@ -89,7 +91,7 @@ function gameOver(p){ //TODO - verify if a win condition after a magic number of
     }
     setTimeout(() => {
         p.innerText = ''
-        sb.disabled = false
+        state = 'game-over'
     }, 5000)
 }
 
