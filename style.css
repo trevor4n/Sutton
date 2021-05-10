@@ -26,6 +26,7 @@ body{
     text-align: center;
 }
 .info{
+    /* visibility: hidden; */
     border-radius: 10% / 50%;
     background-color: gray;
     font: 2.5vmin 'open sans';
@@ -83,4 +84,10 @@ body{
     grid-column: 3;
     grid-row: 4;
     background-color: blue;
+}
+.visible{
+    visibility: visible;
+}
+.invisible{
+    visibility: hidden;
 }

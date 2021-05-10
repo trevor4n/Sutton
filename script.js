@@ -13,7 +13,7 @@ let playerSeq =  []
 
 let inputPhase = false
 
-sb.innerText = 'Start\nSutton'
+//sb.innerText = 'Start\nSutton'
 
 sb.addEventListener('click', () => suttonButton())
 
@@ -33,6 +33,12 @@ function suttonButton(){
     if(state == 'landing'){
         updateHighScore(0)
         //TODO - make streak & high score visible
+        //let info = document.querySelectorAll('.info')
+        //info.forEach((inf) => {console.log(`here ${inf}`); inf.style.visibility = 'visible'})
+        ///let info = document.getElementById('highScore').style.visibility = "visible"
+        console.log(`here: ${document.getElementById('highScore').classList}`)
+        document.getElementById('highScore').classList.remove('invisible')
+        console.log(`here: ${document.getElementById('highScore').classList}`)
         state = 'game-sequence'
     }
     gameSequence()
@@ -65,8 +71,8 @@ function playerSequence(){
 
 function padIn(p){
     if(inputPhase){
-        playerSeq.push(p.id.substring(1)) //TODO: in HTML 4, ids must begin with a letter... html pad ids updated...
-        suttonShow(p.id)
+        playerSeq.push(p.id.substring(1)) //in HTML 4, ids must begin with a letter
+        suttonShow(p.id.substring(1))
         //let padIndex = playerSeq.length-1
         if(playerSeq.length == gameSeq.length)//If the user is finished entering their sequence don't let them enter any extra
             inputPhase = false
@@ -91,10 +97,12 @@ function gameOver(p){
 function suttonShow(g){
     //TODO - fade 3 pads & brighten the next in the pattern
     //pads[g]
+    return
 }
 
 function suttonSolid(){
     //TODO - return all pads to default transparency & reset their text(to remove game over description)
+    return
 }
 
 function updateStreak(s){
