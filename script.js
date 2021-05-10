@@ -65,7 +65,7 @@ function playerSequence(){
 
 function padIn(p){
     if(inputPhase){
-        playerSeq.push(p.id)
+        playerSeq.push(p.id.substring(1)) //TODO: in HTML 4, ids must begin with a letter... html pad ids updated...
         suttonShow(p.id)
         //let padIndex = playerSeq.length-1
         if(playerSeq.length == gameSeq.length)//If the user is finished entering their sequence don't let them enter any extra

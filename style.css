@@ -1,7 +1,87 @@
-.pad{
-    float: left;
-    width: 30vh;
-    padding-bottom: 30vh;
-    margin: 1.66%;
+@font-face {
+    font-family: 'Abril Fatface';
+    src: url("https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap");
+}
+body{
+    margin: 0; /* ref https://stackoverflow.com/a/46874091 */
+    background-color: linen;
+}
+*{
+    /* padding & borders (not margins) factored into content length */
+    /* ref https://stackoverflow.com/a/48198484 */
+    box-sizing: border-box; 
+}
+.wrapper{ /* gamepad */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 24px;
+
+    padding: 24px;
+    height: 100vh;    
+}
+/* .info, .pad{
+    border-radius: 200px;
+    color: black;
+    text-align: center;
+} */
+/* As Paresh mentioned regarding corporate projects, unique classes aren't efficient */
+.wrapper>div{ 
+    border-radius: 200px;
+    color: black;
+    text-align: center;
+}
+.info{
     background-color: gray;
+    font: 20px 'open sans';
+    border: dashed;
+}
+#highScore{
+    grid-column: 1;
+    grid-row: 1;
+}
+#streak{
+    grid-column: 3;
+    grid-row: 1;
+}
+#suttonButton{
+    grid-column: 2;
+    grid-row: 3;
+    background-color: black;
+    color: white;
+    font: 200 32px 'Abril Fatface';
+    text-transform: uppercase;
+    border-radius: 50%;
+    
+    /* Center text in circle */
+    width: 20vw;
+    height: 20vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pad{
+    /* 
+    TODO - styling for games with more than 4 pads
+    */
+}
+#p0{
+    grid-column: 1;
+    grid-row: 2;
+    background-color: green;
+}
+#p1{
+    grid-column: 3;
+    grid-row: 2;
+    background-color: red;
+}
+#p2{
+    grid-column: 1;
+    grid-row: 4;
+    background-color: yellow;
+}
+#p3{
+    grid-column: 3;
+    grid-row: 4;
+    background-color: blue;
 }
