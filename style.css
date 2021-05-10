@@ -91,3 +91,6 @@ body{
 .invisible{
     visibility: hidden;
 }
+.bright{
+    background-color: white;
+}
