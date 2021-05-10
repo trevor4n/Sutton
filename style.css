@@ -93,5 +93,5 @@ body{
     visibility: hidden;
 }
 .bright{
-    background-color: white;
+    background-color: white !important;
 }
