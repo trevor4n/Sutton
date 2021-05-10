@@ -66,13 +66,7 @@ async function gameSequence(){
 function playerSequence(){
     playerSeq = []
     inputPhase = true //STRETCH - phase out  this connditional entirely (possibly by disabling the pad buttons)
-    let validatedSeq = 0
-    while(validatedSeq < gameSeq.length){
-        //TODO - grab padIn code
-        
-    }
-    inputPhase = false //TODO - possibly move this into a condidional w/n the while loop
-    console.log('Player Sequence match')
+   //let validatedSeq = 0
     gameSequence()
 }
 
@@ -80,13 +74,20 @@ function padIn(p){
     if(inputPhase){
         playerSeq.push(p.id.substring(1)) //in HTML 4, ids must begin with a letter
         suttonShow(p)
-        if(playerSeq.length == gameSeq.length)//If the user is finished entering their sequence don't let them enter any extra
+        let l = playerSeq.length
+        if(playerSeq[l-1] == gameSeq[l-1]){ //if the user enters a correct sequence element
+            console.log('Player pad match')
+            score++
+            updateStreak(score)
+            if(l == gameSeq.length){//If the user is finished entering their sequence don't let them enter any extra
+                inputPhase = false
+                console.log('Player sequence match')
+            }
+        }else{ //user entered incorrect pad pattern
+            console.log('Player pad mismatch')
             inputPhase = false
-        if(playerSeq[playerSeq.length-1] != gameSeq[playerSeq.length-1]){ //if the user enters an incorrect sequence element
             gameOver(p)
-            return //dont stop showing the incorrect pad right away
         }
-        setTimeout(suttonSolid, 500) //TODO - the pad should stay highlighted for 500ms OR until another button is pressed, whatever comes first
     }
 }
 
