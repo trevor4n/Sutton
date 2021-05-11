@@ -1,99 +1,108 @@
-@font-face {
-    font-family: 'Abril Fatface';
-    src: url("https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap");
+:root{
+    --grid-cols: 1;
+    --grid-rows: 1;
+    /* background: rgb(253,187,45); */
+    /* background: radial-gradient(circle, rgba(253,187,45,1) 0%, rgba(34,193,195,1) 96%); */
+    background: rgb(131,58,180);
+    background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
 }
 body{
     margin: 0; /* ref https://stackoverflow.com/a/46874091 */
-    background-color: linen;
 }
 *{
     /* padding & borders (not margins) factored into content length */
     /* ref https://stackoverflow.com/a/48198484 */
     box-sizing: border-box; 
 }
-.wrapper{ /* gamepad */
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 16px;
-
-    padding: 16px;
-    height: 100vh;    
-}
-/* As Paresh mentioned regarding corporate projects, unique classes aren't efficient */
-.wrapper>div{ 
-    color: black;
+.wrap{
+    /* ref https://css-tricks.com/using-flexbox/ */
+    display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox;      /* TWEENER - IE 10 */
+    display: -webkit-flex;     /* NEW - Chrome */
+    display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    
+    justify-content: space-evenly;
     text-align: center;
+    padding: 2vh;
+    height: 20vh;   
 }
 .info{
-    /* visibility: hidden; */
-    border-radius: 10% / 50%;
-    background-color: gray;
-    font: 2.5vmin 'open sans';
-    border: dashed;
+    visibility: hidden;
+    font: 400 4vmin 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
 }
-#highScore{
-    display: none;
-    grid-column: 2;
-    grid-row: 1;
-}
-#streak{
-    grid-column: 2;
-    grid-row: 3;
+@media screen and (min-width: 800px){
+    .info{
+        align-items: center;
+        font: 200;
+    }
 }
 #suttonButton{
-    grid-column: 2;
-    grid-row: 2;
-    place-self: center; /* aligns along the inline (row) & block (column) axis */
-    align-self: center;
-
     background-color: black;
     color: white;
-    font: 200 3vmin 'Abril Fatface';
+    font: 100 5vmin 'Bebas Neue', 'open sans';
     text-transform: uppercase;
     border-radius: 50%;
-    
+    /* position: fixed; */
+
     /* Center text in circle */
-    width: 20vmin;
-    height: 20vmin;
+    width: 16vmin;
+    height: 16vmin;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.pad{
-    border-radius: 100px;
-    /* 
-    STRETCH - styling for games with more than 4 pads
-    */
+#plus, #minus{
+    background-color: black;
+    color: white;
+    font: 100 3em 'Bebas Neue', 'open sans';
+    text-transform: uppercase;
+    border-radius: 50%;
+    
+    /* Center text in circle */
+    width: 8vmin;
+    height: 8vmin;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-#p0{
-    grid-column: 1;
-    grid-row: 1;
-    background-color: green;
+.wrapper{
+    display: grid;
+    grid-template-columns: repeat(var(--grid-cols), 1fr);
+    grid-template-rows: repeat(var(--grid-rows), 1fr);
+    gap: 1em;
+    padding: 2vh;
+    height: 72vh;    
 }
-#p1{
-    grid-column: 3;
-    grid-row: 1;
-    background-color: red;
+.grid-item{
+    place-self: center; 
+    align-self: center;
+    text-align: center;
+    border-radius: 50%;
+    font: 3vmin 'Roboto', sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    width: 16vmin;
+    height: 16vmin;
+    color: white;
+    text-shadow: 2px 2px 4px black;
+    border-style: solid;
+    border-color: black;
+    /* pointer-events: none; */
 }
-#p2{
-    grid-column: 1;
-    grid-row: 3;
-    background-color: yellow;
-}
-#p3{
-    grid-column: 3;
-    grid-row: 3;
-    background-color: blue;
-}
-.visible{
-    visibility: visible;
-}
-.invisible{
-    visibility: hidden;
+.grid-item img{
+    display: block;
 }
 .bright{
-    background-color: white !important;
+    border-color: white;
+    -webkit-box-shadow: 0 0 100px white;
+    -moz-box-shadow: 0 0 100px white;
+    box-shadow: 0 0 100px white;
 }
 .noselect { /* https://stackoverflow.com/a/9314458/3911210 */
     -webkit-touch-callout: none; /* iOS Safari */

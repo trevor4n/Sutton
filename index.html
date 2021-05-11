@@ -5,20 +5,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Sutton Says</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <title>Sutton</title>
 </head>
 <body>
-    <div class="wrapper noselect">
+    <div class="wrap noselect">
         <div class='info' id="highScore"></div>
-        <div class='info invisible' id="streak"></div>
-
-        <!-- gamepad buttons -->
-        <div class="pad" id="p0"></div> 
-        <div class="pad" id="p1"></div>
-        <div class="pad" id="p2"></div>
-        <div class="pad" id="p3"></div>
-
+        <div class='info' id="streak"></div>
         <div id='suttonButton'>Start<br>Sutton</div>
+        <div class="difficulty">
+            <div id="plus">+</div>
+            <div id="minus">-</div>
+        </div>
+        <div class="info" id='padCounter'></div>
+    </div>
+
+    <div class="wrapper noselect">    
+        <!-- gamepad buttons -->
     </div>
 
     <script src="script.js"></script>
