@@ -1,4 +1,5 @@
-require('dotenv').config()
+//require('dotenv').config()
+//require('dotenv').config({ path: __dirname + '/.env' })
 
 // const { resolve } = require("path/posix")
 let streak = document.getElementById('streak')
