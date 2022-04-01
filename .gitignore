@@ -1,3 +1,7 @@
 .jshintrc
-.env
 node_modules/ 
+.env
+.netlify
+
+# testing
+bundle_sample.js

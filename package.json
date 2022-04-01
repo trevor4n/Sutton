@@ -1,6 +1,25 @@
 {
+  "name": "sutton",
+  "description": "![image](https://user-images.githubusercontent.com/44274876/118234244-b31bd700-b458-11eb-9727-4d4bd56e2c71.png)",
+  "version": "1.0.0",
+  "main": "script.js",
   "dependencies": {
+    "axios": "^0.26.1",
     "dotenv": "^16.0.0",
-    "nodemon": "^2.0.15"
-  }
+    "nodemon": "^2.0.15",
+    "qs": "^6.10.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trevor4n/Sutton.git"
+  },
+  "author": "trevor4n",
+  "license": "proprietary",
+  "bugs": {
+    "url": "https://github.com/trevor4n/Sutton/issues"
+  },
+  "homepage": "https://github.com/trevor4n/Sutton#readme"
 }
