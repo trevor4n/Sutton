@@ -3,7 +3,7 @@ const process = require('process')
 const axios = require('axios')
 const qs = require('qs')
 
-const handler = async function (event, context, callback) {
+exports.handler = async function (event, context, callback) {
   const API_PARAMS = qs.stringify(event.queryStringParameters) || '90648782'
   console.log('API_PARAMS', API_PARAMS)
   const { API_TOKEN, API_TOKEN_TESTING, API_URL } = process.env
@@ -12,8 +12,6 @@ const handler = async function (event, context, callback) {
   ◈ Injected .env file env var: UNSPLASH_KEY
   ◈ Injected .env file env var: UNSPLASH_TESTING_KEY
   note this function requires API_URL and API_TOKEN build environment variables set in your Netlify Site. */
-  // const URL = `${API_URL}${API_PARAMS}/photos?client_id=${API_SECRET}/images`
-  // const URL = `${API_URL}${API_PARAMS}/photos?client_id=${UNSPLASH_KEY}&per_page=${paginationCap}&page=1`
   const URL = `${API_URL}${API_PARAMS}/photos?client_id=${API_TOKEN}&per_page=${paginationCap}&page=1`
   console.log('Constructed URL is ...', URL)
 
@@ -21,8 +19,9 @@ const handler = async function (event, context, callback) {
     const { data } = await axios.get(
       URL,
       { headers: {
-        'Authorization': 'client_id=' + API_TOKEN,
-        'Accept-Version': 'v1'
+        Accept: "application/json"
+        // 'Authorization': 'client_id=' + API_TOKEN,
+        // 'Accept-Version': 'v1'
       } }
     )
 
@@ -39,4 +38,4 @@ const handler = async function (event, context, callback) {
   }
 }
 
-module.exports = { handler }
+// module.exports = { handler }
