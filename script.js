@@ -103,7 +103,7 @@ function genGrid(){
     console.log('generating grid ⏳⏳⌛')
     let fruitBundle = []
 
-    fetch('/netlify/functions/token-hider?collectionId=' + '9660118')
+    fetch('/.netlify/functions/token-hider?collectionId=' + '9660118')
     .then((data) => data.json()) // Reading the Response stream to completion 
     // .then(({ alt_description }) => console.log('serverless-api response' + alt_description) || setHighScore(alt_description) )
     .then((data) => fruitBundle = data)

@@ -13,14 +13,15 @@ const handler = async function (event, context, callback) {
   ◈ Injected .env file env var: UNSPLASH_TESTING_KEY
   note this function requires API_URL and API_TOKEN build environment variables set in your Netlify Site. */
   // const URL = `${API_URL}${API_PARAMS}/photos?client_id=${API_SECRET}/images`
-  const URL = `${API_URL}${API_PARAMS}/photos?client_id=${UNSPLASH_KEY}&per_page=${paginationCap}&page=1`
+  // const URL = `${API_URL}${API_PARAMS}/photos?client_id=${UNSPLASH_KEY}&per_page=${paginationCap}&page=1`
+  const URL = `${API_URL}${API_PARAMS}/photos?client_id=${API_TOKEN}&per_page=${paginationCap}&page=1`
   console.log('Constructed URL is ...', URL)
 
   try {
     const { data } = await axios.get(
       URL,
       { headers: {
-        'Authorization': 'client_id=' + UNSPLASH_KEY,
+        'Authorization': 'client_id=' + API_TOKEN,
         'Accept-Version': 'v1'
       } }
     )
