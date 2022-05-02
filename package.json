@@ -6,11 +6,12 @@
   "dependencies": {
     "axios": "^0.26.1",
     "dotenv": "^16.0.0",
-    "netlify-cli": "^10.1.0",
     "nodemon": "^2.0.15",
     "qs": "^6.10.3"
   },
   "scripts": {
+    "build": "echo \"netlify.toml used for serverless function path & pub\"",
+    "netlify": "./node_modules/.bin/netlify",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/trevor4n/Sutton/issues"
   },
-  "homepage": "https://github.com/trevor4n/Sutton#readme"
+  "homepage": "https://github.com/trevor4n/Sutton#readme",
+  "devDependencies": {
+    "netlify-cli": "^10.1.0"
+  }
 }

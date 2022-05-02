@@ -16,7 +16,7 @@ let playerSeq =  []
 let cols = 2
 let rows = 2
 let gridSize = 4
-let  gridStyleCap = 16
+let gridStyleCap = 16
 
 pc.innerText = `Number\nof pads: ${gridSize}`
 pc.style.visibility = 'visible'
@@ -169,11 +169,14 @@ function suttonShow(p){
     })
 }
 
+// async function padIn(p){
 async function padIn(p){
     if(state == 'input-phase'){
         let l = playerSeq.length
-        // if(l < gameSeq.length){
+        if(l < gameSeq.length){
             playerSeq.push(p) //in HTML 4, ids must begin with a letter
+            console.log('P:::', p)
+            /****
             let act = await suttonShow(p)
             .then(() => {
                 console.log(act)
@@ -191,9 +194,42 @@ async function padIn(p){
                     gameOver(p, pExpected)
                 }
             })
-        // }else{
-            // console.log('input quantity exceeded expectations')
-        // }
+            */
+        //    suttonShow(p, function(act){
+        //         console.log(act)
+        //         let pExpected = gameSeq[l-1]
+        //         if(playerSeq[l-1].id == gameSeq[l-1].id){
+        //             console.log('Player pad match')
+        //             if(l == gameSeq.length){
+        //                 console.log('Player sequence match')
+        //                 score = l
+        //                 setStreak(score)
+        //                 gameSequence()
+        //             }
+        //         }else{
+        //             //console.log('Player pad mismatch')
+        //             gameOver(p, pExpected)
+        //         }
+        //    })
+                suttonShow(p) = (act) => {
+                console.log(act)
+                let pExpected = gameSeq[l-1]
+                if(playerSeq[l-1].id == gameSeq[l-1].id){
+                    console.log('Player pad match')
+                    if(l == gameSeq.length){
+                        console.log('Player sequence match')
+                        score = l
+                        setStreak(score)
+                        gameSequence()
+                    }
+                }else{
+                    //console.log('Player pad mismatch')
+                    gameOver(p, pExpected)
+                }
+           }
+        }else{
+            console.log('input quantity exceeded expectations')
+        }
     }
 }
 

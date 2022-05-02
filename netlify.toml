@@ -1,6 +1,5 @@
-# example netlify.toml
 [build]
-  # command = "CI= npm run build"
+  command = "CI= npm run build"
   functions = "/functions"
   publish = "."
 
