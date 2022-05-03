@@ -110,7 +110,7 @@ function genGrid(){
     .catch(err => { console.log('something went wrong', err) })
     .finally(() => {
         console.log('retrieved ' + fruitBundle.length + ' records from the dataset!')
-        console.log(fruitBundle)
+        // console.log(fruitBundle)
 
         for(c = 0; c < cols; c++){
             for(r = 0; r < rows; r++){
@@ -124,7 +124,6 @@ function genGrid(){
     
                 pads.push(document.querySelector('#' + id))
     
-                //console.log(fruitBundle[0][i++]["urls"])
                 let src = fruitBundle[padCount++].urls.thumb + '&auto=format&q=80' 
                 cell.style = "background-image: url(" + src + ');'
     
@@ -148,10 +147,10 @@ async function gameSequence(){
     let rand = Math.floor(Math.random() * padCount)
     gameSeq.push(pads[rand])
     sb.innerText = 'Sutton\nSays!'
-    console.log('gameSeq::',gameSeq)
+    // console.log('gameSeq::',gameSeq)
     for(let g of gameSeq){
         let active = await suttonShow(g) //FIX
-        console.log(active) //expected output: "pad shown"
+        // console.log(active) //expected output: "pad shown"
     }
     playerSeq = []
     sb.innerText = 'Your\nTurn'
@@ -159,7 +158,6 @@ async function gameSequence(){
 }
 
 function suttonShow(p){
-    // console.log('p::',p)
     return new Promise(resolve => {
         p.classList.add("bright") //pad immediately flashes white
         setTimeout(() => { //after 0.75sec the pad resets
@@ -169,19 +167,17 @@ function suttonShow(p){
     })
 }
 
-// async function padIn(p){
 async function padIn(p){
     if(state == 'input-phase'){
-        let l = playerSeq.length
-        if(l < gameSeq.length){
+        if(playerSeq.length < gameSeq.length){
             playerSeq.push(p) //in HTML 4, ids must begin with a letter
-            console.log('P:::', p)
-            /****
-            let act = await suttonShow(p)
-            .then(() => {
-                console.log(act)
+            let l = playerSeq.length
+            // let act = await suttonShow(p)
+            await suttonShow(p)
+            .then((act) => {
+            // suttonShow(p, function(act){
                 let pExpected = gameSeq[l-1]
-                if(playerSeq[l-1].id == gameSeq[l-1].id){
+                if(playerSeq[l-1].id === pExpected.id){
                     //console.log('Player pad match')
                     if(l == gameSeq.length){
                         //console.log('Player sequence match')
@@ -194,39 +190,6 @@ async function padIn(p){
                     gameOver(p, pExpected)
                 }
             })
-            */
-        //    suttonShow(p, function(act){
-        //         console.log(act)
-        //         let pExpected = gameSeq[l-1]
-        //         if(playerSeq[l-1].id == gameSeq[l-1].id){
-        //             console.log('Player pad match')
-        //             if(l == gameSeq.length){
-        //                 console.log('Player sequence match')
-        //                 score = l
-        //                 setStreak(score)
-        //                 gameSequence()
-        //             }
-        //         }else{
-        //             //console.log('Player pad mismatch')
-        //             gameOver(p, pExpected)
-        //         }
-        //    })
-                suttonShow(p) = (act) => {
-                console.log(act)
-                let pExpected = gameSeq[l-1]
-                if(playerSeq[l-1].id == gameSeq[l-1].id){
-                    console.log('Player pad match')
-                    if(l == gameSeq.length){
-                        console.log('Player sequence match')
-                        score = l
-                        setStreak(score)
-                        gameSequence()
-                    }
-                }else{
-                    //console.log('Player pad mismatch')
-                    gameOver(p, pExpected)
-                }
-           }
         }else{
             console.log('input quantity exceeded expectations')
         }

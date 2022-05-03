@@ -5,12 +5,15 @@
   "main": "script.js",
   "dependencies": {
     "axios": "^0.26.1",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.0",
     "nodemon": "^2.0.15",
     "qs": "^6.10.3"
   },
   "scripts": {
-    "build": "echo \"netlify.toml used for serverless function path & pub\"",
+    "prebuild": "echo \"netlify.toml used for serverless function path & pub\"",
+    "build": "echo \"setting env to prod \" & cross-env NODE_ENV=production &",
+    "postbuild": "echo \"build complete\"",
     "netlify": "./node_modules/.bin/netlify",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
