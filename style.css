@@ -55,6 +55,7 @@ body{
     justify-content: center;
 }
 #plus, #minus{
+    visibility: hidden;
     background-color: black;
     color: white;
     font: 100 3em 'Bebas Neue', 'open sans';

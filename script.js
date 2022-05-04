@@ -5,84 +5,115 @@ let wrapper = document.querySelector('.wrapper')
 let pb = document.getElementById('plus')
 let mb = document.getElementById('minus')
 let pc = document.getElementById('padCounter')
+let fr = document.getElementById('freeze')
 
 let padCount = 0
 let score = 0
 let hs = 0
-let state = 'landing'
+let state = 'gathering'
 let pads = []
 let gameSeq = []
 let playerSeq =  []
 let cols = 2
 let rows = 2
-let gridSize = 4
-let gridStyleCap = 16
+let grid = [4, 6, 8, 9, 12, 16] // Gameplay difficulty 0-5
+let gridSize = 0
+let fruitBundle = []
 
-pc.innerText = `Number\nof pads: ${gridSize}`
-pc.style.visibility = 'visible'
-
-function valGrid(b){
-    let flag = false
-    if(gridSize == 10 || gridSize == 14)
-        gridSize += 2
-    if((gridSize % 4 == 0) && (gridSize > 4)){
-        cols = 4
-        rows = gridSize / cols
-        flag = true
-    }else if(gridSize % 3 == 0){
-        cols = 3
-        rows = gridSize / cols
-        flag = true
-    }else if(gridSize % 2 == 0){
-        cols = 2
-        rows = gridSize / 2
-        flag = true
-    }
-    else if(gridSize + 1 <= gridStyleCap && b){
-        gridSize++
-        flag = valGrid()
-    }
-    else if(!b){
-        gridSize--
-        flag = valGrid()
-    }
-    return flag
-}
+pc.style.visibility = 'hidden'
+pc.innerText = `Number\nof pads: ${grid[gridSize]}`
 
 pb.addEventListener('click', () => {
-    let gs = gridSize
-    if(gridSize < gridStyleCap){
+    if(gridSize < grid.length - 1){
         gridSize++
-        let val = valGrid(true)
-        //console.log(gridSize, cols, rows)
-        if(!val)
-            gridSize = gs
+        console.log(genGrid())
     }
-    pc.innerText = `Number\nof pads: ${gridSize}`
+    updateNumberOfPads()
 })
 
 mb.addEventListener('click', () => {
-    let gs = gridSize
-    if(gridSize >= 6){
-        if(gridSize == 16 || gridSize == 12)
-            gridSize -= 2
+    if(gridSize > 0){
         gridSize--
-        let val = valGrid(false)
-        if(!val)
-            gridSize = gs            
+        console.log(genGrid())
     }
-    pc.innerText = `Number\nof pads: ${gridSize}`
+    updateNumberOfPads()
 })
+
+function grabSomeFruit(){
+    console.log('🥝 grabbing some fruit! 🍍')
+    fetch('/.netlify/functions/token-hider?collectionId=' + 9660118)
+    .then((data) => data.json()) // Reading the Response stream to completion 
+    // .then(({ alt_description }) => console.log('serverless-api response' + alt_description) || setHighScore(alt_description) )
+    .then((data) => fruitBundle = data)
+    .catch(err => { console.log('something went wrong', err) })
+    .finally(() => {
+        console.log('retrieved ' + fruitBundle.length + ' records from the dataset!')
+        // console.log(fruitBundle)
+        state = 'landing'
+        console.log(genGrid())        
+        pb.style.visibility = 'visible'
+        mb.style.visibility = 'visible'
+        pc.style.visibility = 'visible'
+    })
+}
+grabSomeFruit()
+
+function genGrid(){
+    console.log('generating grid ⏳⏳⌛')
+
+    wrapper.innerHTML = ''
+    pads = []
+    padCount = 0
+
+    let gs = grid[gridSize]
+
+    if((gs % 4 == 0) && (gs >= 12)){
+        cols = 4
+    } else if((gs % 3) == 0){
+        cols = 3
+    } else{
+        cols = 2
+    }
+    rows = gs / cols
+
+    for(r = 0; r < rows; r++){
+        for(c = 0; c < cols; c++){
+            let cell = document.createElement('div')
+            wrapper.appendChild(cell).className = "grid-item"
+
+            let id = 'c' + c + 'r' + r
+            cell.id = id
+            cell.style.setProperty('grid-row', r)
+            cell.style.setProperty('grid-column', c)
+
+            pads.push(document.querySelector('#' + id))
+
+            let src = fruitBundle[padCount++].urls.thumb + '&auto=format&q=80' 
+            cell.style = "background-image: url(" + src + ');'
+
+            cell.addEventListener('click', () => padIn(event.currentTarget))
+        }
+    }
+
+    wrapper.style.setProperty("--grid-cols", cols)
+    wrapper.style.setProperty("--grid-rows", rows)
+    
+    return new Promise(resolve => {
+        resolve('grid generated')
+    })
+}
 
 window.onload = function(){ // Deferred main
     sb.addEventListener('click', () => suttonButton())
 }
 
-
 async function suttonButton(){
-    if(state == 'game-sequence' || state == 'input-phase' || state == 'game-over') 
+    if(state == 'gathering' || state == 'game-sequence' || state == 'input-phase' || state == 'game-over'){
         return
+    }
     sb.disabled = true
+    pb.style.visibility = 'hidden'
+    mb.style.visibility = 'hidden'
     score = 0
     setStreak(score)
     gameSeq = []
@@ -99,52 +130,9 @@ async function suttonButton(){
     }, 2000)
 }
 
-function genGrid(){
-    console.log('generating grid ⏳⏳⌛')
-    let fruitBundle = []
-
-    fetch('/.netlify/functions/token-hider?collectionId=' + 9660118)
-    .then((data) => data.json()) // Reading the Response stream to completion 
-    // .then(({ alt_description }) => console.log('serverless-api response' + alt_description) || setHighScore(alt_description) )
-    .then((data) => fruitBundle = data)
-    .catch(err => { console.log('something went wrong', err) })
-    .finally(() => {
-        console.log('retrieved ' + fruitBundle.length + ' records from the dataset!')
-        // console.log(fruitBundle)
-
-        for(c = 0; c < cols; c++){
-            for(r = 0; r < rows; r++){
-                let cell = document.createElement('div')
-                wrapper.appendChild(cell).className = "grid-item"
-    
-                let id = 'c' + c + 'r' + r
-                cell.id = id
-                cell.style.setProperty('grid-row', r)
-                cell.style.setProperty('grid-column', c)
-    
-                pads.push(document.querySelector('#' + id))
-    
-                let src = fruitBundle[padCount++].urls.thumb + '&auto=format&q=80' 
-                cell.style = "background-image: url(" + src + ');'
-    
-                cell.addEventListener('click', () => padIn(event.currentTarget))
-            }
-        }
-        wrapper.style.setProperty("--grid-cols", cols)
-        wrapper.style.setProperty("--grid-rows", rows)
-    
-        pb.style.visibility = 'hidden'
-        mb.style.visibility = 'hidden'
-        
-        return new Promise(resolve => {
-            resolve('grid generated')
-        })
-    })
-}
-
 async function gameSequence(){
     state = 'game-sequence'
-    let rand = Math.floor(Math.random() * padCount)
+    let rand = Math.floor(Math.random() * grid[gridSize])
     gameSeq.push(pads[rand])
     sb.innerText = 'Sutton\nSays!'
     // console.log('gameSeq::',gameSeq)
@@ -203,16 +191,22 @@ function gameOver(p, pExpected){
     if(score > hs){
         highScore.style.visibility = "visible"
         setHighScore(score)
-        //STRETCH - put a high score bubble on streak
+        //ICEBOX: put a high score bubble on streak
     }
     setTimeout(() => {
         p.innerText = ''
+        pb.style.visibility = 'visible'
+        mb.style.visibility = 'visible'
         state = 'play-again'
     }, 2500)
 }
 
 function setStreak(s){
     streak.innerText = `Streak\n${s}`
+}
+
+function updateNumberOfPads(){
+    pc.innerText = `Number\nof pads: ${grid[gridSize]}`
 }
 
 function setHighScore(s){
