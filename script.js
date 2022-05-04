@@ -1,11 +1,9 @@
-let streak = document.getElementById('streak')
-let highScore = document.getElementById('highScore')
 let sb = document.getElementById('suttonButton')
 let wrapper = document.querySelector('.wrapper')
 let pb = document.getElementById('plus')
 let mb = document.getElementById('minus')
 let pc = document.getElementById('padCounter')
-let fr = document.getElementById('freeze')
+let attribute = document.getElementById('attribution')
 
 let padCount = 0
 let score = 0
@@ -16,24 +14,24 @@ let gameSeq = []
 let playerSeq =  []
 let cols = 2
 let rows = 2
-let grid = [4, 6, 8, 9, 12, 16] // Gameplay difficulty 0-5
-let gridSize = 0
+let grid = [4, 6, 8, 9, 12, 16]
+let gameplayDifficulty = 0
 let fruitBundle = []
 
 pc.style.visibility = 'hidden'
-pc.innerText = `Number\nof pads: ${grid[gridSize]}`
+pc.innerText = `Number\nof pads: ${grid[gameplayDifficulty]}`
 
 pb.addEventListener('click', () => {
-    if(gridSize < grid.length - 1){
-        gridSize++
+    if(gameplayDifficulty < grid.length - 1){
+        gameplayDifficulty++
         console.log(genGrid())
     }
     updateNumberOfPads()
 })
 
 mb.addEventListener('click', () => {
-    if(gridSize > 0){
-        gridSize--
+    if(gameplayDifficulty > 0){
+        gameplayDifficulty--
         console.log(genGrid())
     }
     updateNumberOfPads()
@@ -59,13 +57,11 @@ function grabSomeFruit(){
 grabSomeFruit()
 
 function genGrid(){
-    console.log('generating grid ⏳⏳⌛')
-
+    // console.log('generating grid ⏳⏳⌛')
     wrapper.innerHTML = ''
     pads = []
     padCount = 0
-
-    let gs = grid[gridSize]
+    let gs = grid[gameplayDifficulty]
 
     if((gs % 4 == 0) && (gs >= 12)){
         cols = 4
@@ -91,7 +87,24 @@ function genGrid(){
             let src = fruitBundle[padCount++].urls.thumb + '&auto=format&q=80' 
             cell.style = "background-image: url(" + src + ');'
 
-            cell.addEventListener('click', () => padIn(event.currentTarget))
+            let lnk = fruitBundle[padCount - 1].links.html
+            let nme = fruitBundle[padCount - 1].user.name
+            cell.setAttribute('data-value',lnk)
+
+            cell.addEventListener('click', () => {
+                if(state == 'input-phase' ){
+                    padIn(event.currentTarget)
+                } else if(state === 'gathering' || state === 'game-over' || state === 'play-again'){
+                    frozenFruit(event.currentTarget)
+                }
+            })
+
+            cell.addEventListener('mouseover', () => {
+                let w = document.getElementsByClassName('wrapped')[0]
+                w.style.setProperty("visibility", "visible")
+                attribute.innerText = nme
+                attribute.href = lnk
+            })
         }
     }
 
@@ -108,7 +121,7 @@ window.onload = function(){ // Deferred main
 }
 
 async function suttonButton(){
-    if(state == 'gathering' || state == 'game-sequence' || state == 'input-phase' || state == 'game-over'){
+    if(state === 'gathering' || state === 'game-sequence' || state === 'input-phase' || state == 'game-over'){
         return
     }
     sb.disabled = true
@@ -121,7 +134,7 @@ async function suttonButton(){
 
     if(state == 'landing'){
         setHighScore(0)
-        streak.style.visibility = "visible"
+        document.getElementById('streak').style.visibility = "visible"
         let gg = await genGrid()
         console.log(gg)
     }
@@ -132,7 +145,7 @@ async function suttonButton(){
 
 async function gameSequence(){
     state = 'game-sequence'
-    let rand = Math.floor(Math.random() * grid[gridSize])
+    let rand = Math.floor(Math.random() * grid[gameplayDifficulty])
     gameSeq.push(pads[rand])
     sb.innerText = 'Sutton\nSays!'
     // console.log('gameSeq::',gameSeq)
@@ -189,7 +202,7 @@ function gameOver(p, pExpected){
     sb.innerText = 'Play\nAgain'
     p.innerText = `game over!` 
     if(score > hs){
-        highScore.style.visibility = "visible"
+        document.getElementById('highScore').style.visibility = "visible"
         setHighScore(score)
         //ICEBOX: put a high score bubble on streak
     }
@@ -197,19 +210,24 @@ function gameOver(p, pExpected){
         p.innerText = ''
         pb.style.visibility = 'visible'
         mb.style.visibility = 'visible'
+
         state = 'play-again'
     }, 2500)
 }
 
+function frozenFruit(p){
+    window.open(p.getAttribute('data-value'), '_blank')
+}
+
 function setStreak(s){
-    streak.innerText = `Streak\n${s}`
+    document.getElementById('streak').innerText = `Streak\n${s}`
 }
 
 function updateNumberOfPads(){
-    pc.innerText = `Number\nof pads: ${grid[gridSize]}`
+    pc.innerText = `Number\nof pads: ${grid[gameplayDifficulty]}`
 }
 
 function setHighScore(s){
     hs = s
-    highScore.innerText = `High Score\n${s}`
+    document.getElementById('highScore').innerText = `High Score\n${s}`
 }

@@ -54,6 +54,24 @@ body{
     align-items: center;
     justify-content: center;
 }
+#shuffle{
+    background-color: black;
+    color: white;
+    font: 75 4vmin 'Bebas Neue', 'open sans';
+    text-transform: uppercase;
+    border-radius: 50%;
+    /* position: fixed; */
+
+    /* Center text in circle */
+    width: 12vmin;
+    height: 12vmin;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* position:absolute; */
+    margin-top: 2vh;
+}
 #plus, #minus{
     visibility: hidden;
     background-color: black;
@@ -74,8 +92,14 @@ body{
     grid-template-columns: repeat(var(--grid-cols), 1fr);
     grid-template-rows: repeat(var(--grid-rows), 1fr);
     gap: 1em;
-    padding: 2vh;
+    border-radius: 2vh;
     height: 72vh;    
+}
+.wrapped{
+    /* justify-content: space-evenly; */
+    text-align: right;
+    padding: 2vh;
+    height: 8vh;   
 }
 .grid-item{
     place-self: center; 
