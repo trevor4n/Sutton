@@ -4,6 +4,9 @@ let pb = document.getElementById('plus')
 let mb = document.getElementById('minus')
 let pc = document.getElementById('padCounter')
 let attribute = document.getElementById('attribution')
+let modalClose = document.querySelector('.modal-close')
+let modalBG = document.querySelector('.modal-bg')
+let instructions = document.querySelector('.instructions')
 
 let padCount = 0
 let score = 0
@@ -20,6 +23,9 @@ let fruitBundle = []
 
 pc.style.visibility = 'hidden'
 pc.innerText = `Number\nof pads: ${grid[gameplayDifficulty]}`
+
+modalClose.addEventListener('click', () => { modalBG.classList.add('modal-bg_inactive') })
+instructions.addEventListener('click', () => { modalBG.classList.remove('modal-bg_inactive') })
 
 pb.addEventListener('click', () => {
     if(gameplayDifficulty < grid.length - 1){
