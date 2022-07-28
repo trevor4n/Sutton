@@ -6,15 +6,16 @@
 
 
 ## &#x1F534; Introduction
-Sutton is the name of [the game!](https://trevor4n.github.io/Sutton/) Users must think fast as they play a game of memory. Each round, a random **fruity** sequence is displayed to the player. Players must repeat the pattern using a fantastic input pad. Players can try their best to memorize longer and more challenging streaks!
+Sutton is the name of [the game!](https://main--trevor4n-sutton.netlify.app/) Users must think fast as they play a game of memory. Each round, a random **fruity** sequence is displayed to the player. Players must repeat the pattern using a fantastic input pad. Players can try their best to memorize longer and more challenging streaks!
 
 ## &#x1F534; Technologies used
  - HTML
  - CSS (Grid & Flex)
  - JavaScript
  - Fetch API
- - **[Unsplash API](https://unsplash.com/developers)**
- - **[GitHub Pages (Hosted)](https://trevor4n.github.io/Sutton/)**
+ - Axios isomorphic client
+ - **[Unsplash API](https://unsplash.com/?utm_source=sutton&utm_medium=referral)**
+ - **[Netlify (Hosted)](https://main--trevor4n-sutton.netlify.app/)**
 
 ## &#x1F534; Installation Instructions
   1. Clone this repo
@@ -29,11 +30,9 @@ Sutton is the name of [the game!](https://trevor4n.github.io/Sutton/) Users must
  - [x] As a player, I want the game to alert me when I make a mistake, so that I know the game is over.
 
 ## &#x1F534; Wireframes
-Landing Page
-![image](https://user-images.githubusercontent.com/44274876/118237690-2e7f8780-b45d-11eb-8028-7be809d6574e.png)
-Simple Game
+Simple Gameplay
 ![image](https://user-images.githubusercontent.com/44274876/118238336-017fa480-b45e-11eb-91ae-991c63638c54.png)
-Challenging Game
+Challenging Gameplay
 ![image](https://user-images.githubusercontent.com/44274876/118234244-b31bd700-b458-11eb-9727-4d4bd56e2c71.png)
 Game Over Condition
 ![image](https://user-images.githubusercontent.com/44274876/118238085-ac439300-b45d-11eb-9432-9ef4fa64d4c6.png)
@@ -51,8 +50,6 @@ The biggest hurdle I overcame this project was ensuring there would be no animat
 - [x] Adjustable difficulty (user can increase the quantity of unique memory pads)
 - [ ] Integrate 3rd party API
 - [ ] Colorblind mode
-
-### [Link to project proposal](https://git.generalassemb.ly/flex-323/project-1/issues/15)
 
 ### Timeframes
 | Task | Priority | Estimated Time | Time Invested | Actual Time |
@@ -78,5 +75,7 @@ The biggest hurdle I overcame this project was ensuring there would be no animat
 |5/14| Finalize MVP  | complete
 |5/14| Clean up stretch features | complete
 |5/14| Submit project as an issue to the cohort gallery | complete
-|5/14| Prepare for [demo](https://trevor4n.github.io/Sutton/) | complete
+|5/14| Prepare for [demo](https://main--trevor4n-sutton.netlify.app/) | complete
 |5/15| Presentation | complete
+
+### [Link to project proposal](https://git.generalassemb.ly/flex-323/project-1/issues/15)
