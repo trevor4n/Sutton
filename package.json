@@ -28,6 +28,6 @@
   },
   "homepage": "https://github.com/trevor4n/Sutton#readme",
   "devDependencies": {
-    "netlify-cli": "^10.1.0"
+    "netlify-cli": "^12.7.0"
   }
 }
