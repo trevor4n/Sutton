@@ -7,7 +7,7 @@
     "axios": "^0.26.1",
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.0",
-    "nodemon": "^2.0.15",
+    "nodemon": "^2.0.20",
     "qs": "^6.10.3"
   },
   "scripts": {
@@ -28,6 +28,6 @@
   },
   "homepage": "https://github.com/trevor4n/Sutton#readme",
   "devDependencies": {
-    "netlify-cli": "^10.1.0"
+    "netlify-cli": "^12.12.0"
   }
 }
