@@ -4,17 +4,13 @@
   "version": "1.0.0",
   "main": "script.js",
   "dependencies": {
-    "axios": "^0.26.1",
-    "cross-env": "^7.0.3",
-    "dotenv": "^16.0.0",
-    "nodemon": "^2.0.15",
-    "qs": "^6.10.3"
+    "cross-env": "^7.0.3"
   },
   "scripts": {
     "prebuild": "echo \"netlify.toml used for serverless function path & pub\"",
     "build": "echo \"setting env to prod \" & cross-env NODE_ENV=production &",
     "postbuild": "echo \"build complete\"",
-    "netlify": "./node_modules/.bin/netlify",
+    "netlify": "npx netlify-cli",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,8 +22,5 @@
   "bugs": {
     "url": "https://github.com/trevor4n/Sutton/issues"
   },
-  "homepage": "https://github.com/trevor4n/Sutton#readme",
-  "devDependencies": {
-    "netlify-cli": "^10.1.0"
-  }
+  "homepage": "https://github.com/trevor4n/Sutton#readme"
 }

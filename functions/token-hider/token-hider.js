@@ -1,38 +1,53 @@
 const process = require('process')
 
-const axios = require('axios')
-const qs = require('qs')
+const DEFAULT_COLLECTION_ID = '90648782'
+const PAGINATION_CAP = '30' //default is 10
 
-exports.handler = async function (event, context, callback) {
-  const API_PARAMS = qs.stringify(event.queryStringParameters)
-  const COLLECTION_ID = API_PARAMS.slice(API_PARAMS.indexOf('=') + 1) || '90648782'
-  const paginationCap = '30' //default is 10
-  // const { NODE_ENV, API_KEY: UNSPLASH_TOKEN, API_TST_KEY: UNSPLASH_TESTING_TOKEN, API_URL: UNSPLASH_URL } = process.env
-  // ◈◈◈◈◈◈◈◈◈◈
+// Unsplash collection IDs are numeric (older) or short alphanumeric slugs (newer)
+const VALID_COLLECTION_ID = /^[A-Za-z0-9_-]{1,32}$/
 
-  let URL = `${process.env.UNSPLASH_URL}${COLLECTION_ID}/photos?client_id=${process.env.UNSPLASH_TOKEN}&per_page=${paginationCap}&page=1`
-  
-  console.log('Constructed URL is ...', URL)
+exports.handler = async function (event) {
+  const { collectionId = DEFAULT_COLLECTION_ID } = event.queryStringParameters || {}
 
+  if (!VALID_COLLECTION_ID.test(collectionId)) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ status: 400, statusText: 'Invalid collectionId' }),
+    }
+  }
+
+  // The token goes in the Authorization header only, so it never appears in a URL or a log line
+  const baseUrl = process.env.UNSPLASH_URL.replace(/\/?$/, '/')
+  const url = new URL(`${encodeURIComponent(collectionId)}/photos`, baseUrl)
+  url.searchParams.set('per_page', PAGINATION_CAP)
+  url.searchParams.set('page', '1')
+
+  let response
   try {
-    const { data } = await axios.get(
-      URL,
-      { headers: {
-        // Accept: "application/json",
-        'Authorization': 'client_id=' + process.env.UNSPLASH_TOKEN,
-        'Accept-Version': 'v1'
-      } }
-    )
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify(data),
-    }
+    response = await fetch(url, {
+      headers: {
+        'Authorization': 'Client-ID ' + process.env.UNSPLASH_TOKEN,
+        'Accept-Version': 'v1',
+      },
+    })
   } catch (error) {
-    const { data, headers, status, statusText } = error.response
+    console.log('Unsplash request failed:', error.message)
     return {
-      statusCode: error.response.status,
-      body: JSON.stringify({ status, statusText, headers, data }),
+      statusCode: 502,
+      body: JSON.stringify({ status: 502, statusText: 'Bad Gateway' }),
     }
+  }
+
+  if (!response.ok) {
+    console.log('Unsplash responded with', response.status, 'for collection', collectionId)
+    return {
+      statusCode: response.status,
+      body: JSON.stringify({ status: response.status, statusText: response.statusText }),
+    }
+  }
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(await response.json()),
   }
 }
