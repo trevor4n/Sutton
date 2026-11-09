@@ -46,8 +46,20 @@ mb.addEventListener('click', () => {
 function grabSomeFruit(){
     console.log('🥝 grabbing some fruit! 🍍')
     fetch('/.netlify/functions/token-hider?collectionId=' + 9660118)
-    .then((data) => data.json()) // Reading the Response stream to completion 
+    .then((data) => {
+        if(!data.ok){ throw new Error('token-hider responded with ' + data.status) }
+        return data.json() // Reading the Response stream to completion
+    })
     // .then(({ alt_description }) => console.log('serverless-api response' + alt_description) || setHighScore(alt_description) )
+    .then((data) => {
+        if(!Array.isArray(data) || data.length < Math.max(...grid)){ throw new Error('not enough photos for the largest grid') }
+        return data
+    })
+    .catch(err => {
+        // Saved copy of the collection's photo list. The images still load straight from Unsplash.
+        console.log('something went wrong, using the saved photo list', err)
+        return fetch('fallback-photos.json').then((data) => data.json())
+    })
     .then((data) => fruitBundle = data)
     .catch(err => { console.log('something went wrong', err) })
     .finally(() => {
