@@ -13,7 +13,6 @@ Sutton is the name of [the game!](https://main--trevor4n-sutton.netlify.app/) Us
  - CSS (Grid & Flex)
  - JavaScript
  - Fetch API
- - Axios isomorphic client
  - **[Unsplash API](https://unsplash.com/?utm_source=sutton&utm_medium=referral)**
  - **[Netlify (Hosted)](https://main--trevor4n-sutton.netlify.app/)**
 
