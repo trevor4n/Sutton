@@ -12,6 +12,7 @@ let padCount = 0
 let score = 0
 let hs = 0
 let state = 'gathering'
+let starting = false // true during the 2-second lead-in after Start is clicked
 let pads = []
 let gameSeq = []
 let playerSeq =  []
@@ -127,10 +128,10 @@ window.onload = function(){ // Deferred main
 }
 
 async function suttonButton(){
-    if(state === 'gathering' || state === 'game-sequence' || state === 'input-phase' || state == 'game-over'){
+    if(starting || state === 'gathering' || state === 'game-sequence' || state === 'input-phase' || state == 'game-over'){
         return
     }
-    sb.disabled = true
+    starting = true // the Start button is a <div>, which ignores `disabled`, so repeat clicks are blocked here
     pb.style.visibility = 'hidden'
     mb.style.visibility = 'hidden'
     score = 0
@@ -145,6 +146,7 @@ async function suttonButton(){
         console.log(gg)
     }
     setTimeout(()=>{
+        starting = false
         gameSequence()
     }, 2000)
 }
