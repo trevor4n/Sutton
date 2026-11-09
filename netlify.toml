@@ -1,5 +1,7 @@
 [build]
-  command = "CI= npm run build"
+  # Nothing to build: the site is served as committed and Netlify bundles the function itself.
+  # Kept as an explicit no-op so a build command set in the Netlify UI can't take over.
+  command = "echo 'No build step'"
   functions = "/functions"
   publish = "."
 
