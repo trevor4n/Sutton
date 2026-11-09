@@ -78,8 +78,8 @@ function genGrid(){
     }
     rows = gs / cols
 
-    for(r = 0; r < rows; r++){
-        for(c = 0; c < cols; c++){
+    for(let r = 0; r < rows; r++){
+        for(let c = 0; c < cols; c++){
             let cell = document.createElement('div')
             wrapper.appendChild(cell).className = "grid-item"
 
@@ -97,7 +97,7 @@ function genGrid(){
             let nme = fruitBundle[padCount - 1].user.name
             cell.setAttribute('data-value',lnk)
 
-            cell.addEventListener('click', () => {
+            cell.addEventListener('click', (event) => {
                 if(state == 'input-phase' ){
                     padIn(event.currentTarget)
                 } else if(state === 'gathering' || state === 'game-over' || state === 'play-again'){
