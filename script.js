@@ -234,7 +234,10 @@ function gameOver(p, pExpected){
 }
 
 function frozenFruit(p){
-    window.open(p.getAttribute('data-value'), '_blank')
+    // Cut the new tab's handle back to this one (window.opener) so the opened page can't redirect it.
+    // Done this way rather than with a 'noopener' feature string, which some browsers treat as a request for a popup window.
+    let tab = window.open(p.getAttribute('data-value'), '_blank')
+    if(tab){ tab.opener = null }
 }
 
 function setStreak(s){
