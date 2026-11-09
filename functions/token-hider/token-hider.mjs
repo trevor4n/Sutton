@@ -2,22 +2,36 @@
 // Netlify stops accepting the older Lambda-style `exports.handler` format on July 1, 2027.
 // Still served at /.netlify/functions/token-hider.
 
-const DEFAULT_COLLECTION_ID = '90648782'
+// The game only ever asks for this collection. Serving any other ID would let anyone
+// use this function (and its Unsplash key) as a free proxy and burn through the rate limit.
+const COLLECTION_ID = '9660118'
 const PAGINATION_CAP = '30' //default is 10
 
-// Unsplash collection IDs are numeric (older) or short alphanumeric slugs (newer)
-const VALID_COLLECTION_ID = /^[A-Za-z0-9_-]{1,32}$/
+const HEADERS = {
+  'Content-Type': 'application/json',
+  'X-Content-Type-Options': 'nosniff',
+  // Netlify's CDN cache key includes every query parameter by default, so ?x=1 would
+  // bypass the cache. Key it on collectionId only. Netlify wants this on every response.
+  'Netlify-Vary': 'query=collectionId',
+}
+
+// Successful responses only: Netlify's CDN reuses one for an hour, then keeps serving it
+// for up to a day while it fetches a fresh copy in the background. Unsplash sees roughly
+// one request per hour instead of one per visitor. Browsers aren't affected.
+const CACHE_HEADERS = {
+  'Netlify-CDN-Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+}
 
 export default async function (req) {
-  const collectionId = new URL(req.url).searchParams.get('collectionId') ?? DEFAULT_COLLECTION_ID
+  const collectionId = new URL(req.url).searchParams.get('collectionId') ?? COLLECTION_ID
 
-  if (!VALID_COLLECTION_ID.test(collectionId)) {
-    return new Response(JSON.stringify({ status: 400, statusText: 'Invalid collectionId' }), { status: 400 })
+  if (collectionId !== COLLECTION_ID) {
+    return errorResponse(400, 'Invalid collectionId')
   }
 
   // The token goes in the Authorization header only, so it never appears in a URL or a log line
   const baseUrl = process.env.UNSPLASH_URL.replace(/\/?$/, '/')
-  const url = new URL(`${encodeURIComponent(collectionId)}/photos`, baseUrl)
+  const url = new URL(`${COLLECTION_ID}/photos`, baseUrl)
   url.searchParams.set('per_page', PAGINATION_CAP)
   url.searchParams.set('page', '1')
 
@@ -31,16 +45,33 @@ export default async function (req) {
     })
   } catch (error) {
     console.log('Unsplash request failed:', error.message)
-    return new Response(JSON.stringify({ status: 502, statusText: 'Bad Gateway' }), { status: 502 })
+    return errorResponse(502, 'Bad Gateway')
   }
 
   if (!response.ok) {
-    console.log('Unsplash responded with', response.status, 'for collection', collectionId)
-    return new Response(
-      JSON.stringify({ status: response.status, statusText: response.statusText }),
-      { status: response.status },
-    )
+    console.log('Unsplash responded with', response.status, 'for collection', COLLECTION_ID)
+    return errorResponse(response.status, response.statusText)
   }
 
-  return new Response(JSON.stringify(await response.json()), { status: 200 })
+  // Send only the three fields the game uses, in the same shape Unsplash returns them
+  let photos
+  try {
+    photos = (await response.json()).map((photo) => ({
+      urls: { thumb: photo.urls.thumb },
+      links: { html: photo.links.html },
+      user: { name: photo.user.name },
+    }))
+  } catch (error) {
+    console.log('Unexpected response from Unsplash:', error.message)
+    return errorResponse(502, 'Bad Gateway')
+  }
+
+  return new Response(JSON.stringify(photos), {
+    status: 200,
+    headers: { ...HEADERS, ...CACHE_HEADERS },
+  })
+}
+
+function errorResponse(status, statusText) {
+  return new Response(JSON.stringify({ status, statusText }), { status, headers: HEADERS })
 }
