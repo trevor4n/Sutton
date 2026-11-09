@@ -86,10 +86,7 @@ function genGrid(){
 
             let id = 'c' + c + 'r' + r
             cell.id = id
-            cell.style.setProperty('grid-row', r)
-            cell.style.setProperty('grid-column', c)
-
-            pads.push(document.querySelector('#' + id))
+            pads.push(cell)
 
             let src = fruitBundle[padCount++].urls.thumb + '&auto=format&q=80' 
             cell.style = "background-image: url(" + src + ');'
@@ -118,9 +115,7 @@ function genGrid(){
     wrapper.style.setProperty("--grid-cols", cols)
     wrapper.style.setProperty("--grid-rows", rows)
     
-    return new Promise(resolve => {
-        resolve('grid generated')
-    })
+    return 'grid generated'
 }
 
 window.onload = function(){ // Deferred main
