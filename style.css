@@ -49,24 +49,6 @@ body{
     align-items: center;
     justify-content: center;
 }
-#shuffle{
-    background-color: black;
-    color: white;
-    font: 75 4vmin 'Bebas Neue', 'open sans';
-    text-transform: uppercase;
-    border-radius: 50%;
-    /* position: fixed; */
-
-    /* Center text in circle */
-    width: 12vmin;
-    height: 12vmin;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    /* position:absolute; */
-    margin-top: 2vh;
-}
 #plus, #minus{
     visibility: hidden;
     background-color: black;
