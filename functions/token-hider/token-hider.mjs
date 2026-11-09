@@ -1,4 +1,6 @@
-const process = require('process')
+// Netlify Functions API: takes a web Request and returns a web Response.
+// Netlify stops accepting the older Lambda-style `exports.handler` format on July 1, 2027.
+// Still served at /.netlify/functions/token-hider.
 
 const DEFAULT_COLLECTION_ID = '90648782'
 const PAGINATION_CAP = '30' //default is 10
@@ -6,14 +8,11 @@ const PAGINATION_CAP = '30' //default is 10
 // Unsplash collection IDs are numeric (older) or short alphanumeric slugs (newer)
 const VALID_COLLECTION_ID = /^[A-Za-z0-9_-]{1,32}$/
 
-exports.handler = async function (event) {
-  const { collectionId = DEFAULT_COLLECTION_ID } = event.queryStringParameters || {}
+export default async function (req) {
+  const collectionId = new URL(req.url).searchParams.get('collectionId') ?? DEFAULT_COLLECTION_ID
 
   if (!VALID_COLLECTION_ID.test(collectionId)) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ status: 400, statusText: 'Invalid collectionId' }),
-    }
+    return new Response(JSON.stringify({ status: 400, statusText: 'Invalid collectionId' }), { status: 400 })
   }
 
   // The token goes in the Authorization header only, so it never appears in a URL or a log line
@@ -32,22 +31,16 @@ exports.handler = async function (event) {
     })
   } catch (error) {
     console.log('Unsplash request failed:', error.message)
-    return {
-      statusCode: 502,
-      body: JSON.stringify({ status: 502, statusText: 'Bad Gateway' }),
-    }
+    return new Response(JSON.stringify({ status: 502, statusText: 'Bad Gateway' }), { status: 502 })
   }
 
   if (!response.ok) {
     console.log('Unsplash responded with', response.status, 'for collection', collectionId)
-    return {
-      statusCode: response.status,
-      body: JSON.stringify({ status: response.status, statusText: response.statusText }),
-    }
+    return new Response(
+      JSON.stringify({ status: response.status, statusText: response.statusText }),
+      { status: response.status },
+    )
   }
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify(await response.json()),
-  }
+  return new Response(JSON.stringify(await response.json()), { status: 200 })
 }
