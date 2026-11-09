@@ -16,10 +16,12 @@ const HEADERS = {
 }
 
 // Successful responses only: Netlify's CDN reuses one for an hour, then keeps serving it
-// for up to a day while it fetches a fresh copy in the background. Unsplash sees roughly
-// one request per hour instead of one per visitor. Browsers aren't affected.
+// for up to a day while it fetches a fresh copy in the background. `durable` shares the
+// cached copy across all of Netlify's edge servers (each would otherwise call the function
+// itself), so Unsplash sees roughly one request per hour instead of one per visitor.
+// Browsers aren't affected.
 const CACHE_HEADERS = {
-  'Netlify-CDN-Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+  'Netlify-CDN-Cache-Control': 'public, durable, max-age=3600, stale-while-revalidate=86400',
 }
 
 export default async function (req) {
