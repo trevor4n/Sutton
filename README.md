@@ -48,7 +48,7 @@ The biggest hurdle I overcame this project was ensuring there would be no animat
 ### &#x1F535; Stretch Goals (Not Mandatory):
 - [x] Mobile friendly layout
 - [x] Adjustable difficulty (user can increase the quantity of unique memory pads)
-- [ ] Integrate 3rd party API
+- [x] Integrate 3rd party API
 - [ ] Colorblind mode
 
 ### Timeframes
