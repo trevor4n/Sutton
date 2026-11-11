@@ -1,3 +1,21 @@
+/* Self-hosted Google Fonts (latin subset), licensed under the SIL OFL 1.1 - see fonts/OFL-*.txt */
+@font-face{
+    font-family: 'Bebas Neue';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(fonts/bebas-neue-latin-400.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-stretch: 100%;
+    font-display: swap;
+    src: url(fonts/roboto-latin-400.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 :root{
     --grid-cols: 1;
     --grid-rows: 1;
@@ -21,7 +39,8 @@ body{
     justify-content: space-evenly;
     text-align: center;
     padding: 2vh;
-    height: 20vh;   
+    height: 20vh;
+    height: 20dvh; /* dvh excludes mobile browser toolbars; vh above is the fallback */
 }
 .info{
     visibility: hidden;
@@ -70,13 +89,15 @@ body{
     grid-template-rows: repeat(var(--grid-rows), 1fr);
     gap: 1em;
     border-radius: 2vh;
-    height: 72vh;    
+    height: 72vh;
+    height: 72dvh;
 }
 .wrapped{
     /* justify-content: space-evenly; */
     text-align: right;
     padding: 2vh;
-    height: 8vh;   
+    height: 8vh;
+    height: 8dvh;
 }
 .grid-item{
     place-self: center; 
@@ -110,6 +131,7 @@ body{
     position: fixed;
     width: 100%;
     height: 100vh;
+    height: 100dvh;
     top: 0;
     left: 0;
     background-color: rgba(0,0,0,0.5);
