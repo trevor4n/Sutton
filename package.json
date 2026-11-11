@@ -3,13 +3,7 @@
   "description": "![image](https://user-images.githubusercontent.com/44274876/118234244-b31bd700-b458-11eb-9727-4d4bd56e2c71.png)",
   "version": "1.0.0",
   "main": "script.js",
-  "dependencies": {
-    "cross-env": "^7.0.3"
-  },
   "scripts": {
-    "prebuild": "echo \"netlify.toml used for serverless function path & pub\"",
-    "build": "echo \"setting env to prod \" & cross-env NODE_ENV=production &",
-    "postbuild": "echo \"build complete\"",
     "netlify": "npx netlify-cli",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

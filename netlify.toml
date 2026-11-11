@@ -1,5 +1,7 @@
 [build]
-  command = "CI= npm run build"
+  # Nothing to build: the site is served as committed and Netlify bundles the function itself.
+  # Kept as an explicit no-op so a build command set in the Netlify UI can't take over.
+  command = "echo 'No build step'"
   functions = "/functions"
   publish = "."
 
@@ -18,3 +20,14 @@
   #  publish = "dist" # Folder with the static content for _redirect file
 
   ## more info on configuring this file: https://www.netlify.com/docs/netlify-toml-reference/
+
+# Security headers for the site's files (the function sets its own).
+# The CSP is report-only for now: browsers log violations in the console but block nothing.
+# Once the live site's console stays clean, rename the key to Content-Security-Policy to enforce it.
+# frame-ancestors 'none' means no other site can embed the game in an iframe; to embed it
+# somewhere (a portfolio, say), add that site's origin there before enforcing.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy-Report-Only = "default-src 'self'; img-src 'self' https://images.unsplash.com; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'"
+    X-Content-Type-Options = "nosniff"
