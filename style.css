@@ -16,12 +16,8 @@ body{
 }
 .wrap{
     /* ref https://css-tricks.com/using-flexbox/ */
-    display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
-    display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
-    display: -ms-flexbox;      /* TWEENER - IE 10 */
-    display: -webkit-flex;     /* NEW - Chrome */
-    display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
-    
+    display: flex;
+
     justify-content: space-evenly;
     text-align: center;
     padding: 2vh;
@@ -36,13 +32,12 @@ body{
 @media screen and (min-width: 800px){
     .info{
         align-items: center;
-        font: 200;
     }
 }
 #suttonButton{
     background-color: black;
     color: white;
-    font: 100 5vmin 'Bebas Neue', 'open sans';
+    font: 100 5vmin 'Bebas Neue', sans-serif;
     text-transform: uppercase;
     border-radius: 50%;
     /* position: fixed; */
@@ -54,29 +49,11 @@ body{
     align-items: center;
     justify-content: center;
 }
-#shuffle{
-    background-color: black;
-    color: white;
-    font: 75 4vmin 'Bebas Neue', 'open sans';
-    text-transform: uppercase;
-    border-radius: 50%;
-    /* position: fixed; */
-
-    /* Center text in circle */
-    width: 12vmin;
-    height: 12vmin;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    /* position:absolute; */
-    margin-top: 2vh;
-}
 #plus, #minus{
     visibility: hidden;
     background-color: black;
     color: white;
-    font: 100 3em 'Bebas Neue', 'open sans';
+    font: 100 3em 'Bebas Neue', sans-serif;
     text-transform: uppercase;
     border-radius: 50%;
     
@@ -120,22 +97,14 @@ body{
     border-color: black;
     /* pointer-events: none; */
 }
-.grid-item img{
-    display: block;
-}
 .bright{
     border-color: white;
-    -webkit-box-shadow: 0 0 100px white;
-    -moz-box-shadow: 0 0 100px white;
     box-shadow: 0 0 100px white;
 }
 .noselect { /* https://stackoverflow.com/a/9314458/3911210 */
-    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-touch-callout: none; /* iOS Safari: no long-press menu on pads */
       -webkit-user-select: none; /* Safari */
-       -khtml-user-select: none; /* Konqueror HTML */
-         -moz-user-select: none; /* Firefox */
-          -ms-user-select: none; /* Internet Explorer/Edge */
-              user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+              user-select: none;
   }
 .modal-bg{
     position: fixed;
@@ -159,7 +128,7 @@ body{
     justify-content: space-around;
     align-items: center;
     flex-direction: column;
-    font-family: 'Bebas Neue', 'open sans';
+    font-family: 'Bebas Neue', sans-serif;
     padding: 2vh;
 
 }

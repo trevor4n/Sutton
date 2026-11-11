@@ -12,6 +12,7 @@ let padCount = 0
 let score = 0
 let hs = 0
 let state = 'gathering'
+let starting = false // true during the 2-second lead-in after Start is clicked
 let pads = []
 let gameSeq = []
 let playerSeq =  []
@@ -78,17 +79,14 @@ function genGrid(){
     }
     rows = gs / cols
 
-    for(r = 0; r < rows; r++){
-        for(c = 0; c < cols; c++){
+    for(let r = 0; r < rows; r++){
+        for(let c = 0; c < cols; c++){
             let cell = document.createElement('div')
             wrapper.appendChild(cell).className = "grid-item"
 
             let id = 'c' + c + 'r' + r
             cell.id = id
-            cell.style.setProperty('grid-row', r)
-            cell.style.setProperty('grid-column', c)
-
-            pads.push(document.querySelector('#' + id))
+            pads.push(cell)
 
             let src = fruitBundle[padCount++].urls.thumb + '&auto=format&q=80' 
             cell.style = "background-image: url(" + src + ');'
@@ -97,7 +95,7 @@ function genGrid(){
             let nme = fruitBundle[padCount - 1].user.name
             cell.setAttribute('data-value',lnk)
 
-            cell.addEventListener('click', () => {
+            cell.addEventListener('click', (event) => {
                 if(state == 'input-phase' ){
                     padIn(event.currentTarget)
                 } else if(state === 'gathering' || state === 'game-over' || state === 'play-again'){
@@ -117,9 +115,7 @@ function genGrid(){
     wrapper.style.setProperty("--grid-cols", cols)
     wrapper.style.setProperty("--grid-rows", rows)
     
-    return new Promise(resolve => {
-        resolve('grid generated')
-    })
+    return 'grid generated'
 }
 
 window.onload = function(){ // Deferred main
@@ -127,10 +123,10 @@ window.onload = function(){ // Deferred main
 }
 
 async function suttonButton(){
-    if(state === 'gathering' || state === 'game-sequence' || state === 'input-phase' || state == 'game-over'){
+    if(starting || state === 'gathering' || state === 'game-sequence' || state === 'input-phase' || state == 'game-over'){
         return
     }
-    sb.disabled = true
+    starting = true // the Start button is a <div>, which ignores `disabled`, so repeat clicks are blocked here
     pb.style.visibility = 'hidden'
     mb.style.visibility = 'hidden'
     score = 0
@@ -145,6 +141,7 @@ async function suttonButton(){
         console.log(gg)
     }
     setTimeout(()=>{
+        starting = false
         gameSequence()
     }, 2000)
 }
