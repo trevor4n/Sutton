@@ -33,21 +33,20 @@
 
     
 
-    <div class='modal-bg'>
-        <div class='modal'>
-            <h1>Ready up for Sutton, 
-                <br> a modern twist on the 
-                <br> classic memory game Simon!</h1>
+    <!-- Closed on load; the Instructions button opens it -->
+    <div class='modal-bg modal-bg_inactive'>
+        <div class='modal' role='dialog' aria-labelledby='modal-title'>
+            <h1 id='modal-title'>Ready up for Sutton, a modern twist on the classic memory game Simon!</h1>
                 <h3>Instructions:</h3>
                 <ul>
-                    <li>Use the plus/minus buttons to preivew 6 gameplay difficulty settings</li>
+                    <li>Use the plus/minus buttons to preview 6 gameplay difficulty settings</li>
                     <li>Click on Start Sutton to begin</li>
                     <li>Memorize Sutton's pattern</li>
                     <li>Wait for 'your turn' then match Sutton's pattern</li>
                     <li>See how long you can keep the streak alive!</li>
                 </ul>
-                <h2>Will you tactically limit the difficulty to just a few gamepads? <br> Increasing those possibilities might just give you an edge... </h2>
-            <span class='modal-close'>&times;</span>
+                <h2>Will you tactically limit the difficulty to just a few gamepads? Increasing those possibilities might just give you an edge... </h2>
+            <button class='modal-close' aria-label='Close instructions'>&times;</button>
         </div>
     </div>
 
