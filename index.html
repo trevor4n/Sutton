@@ -9,8 +9,8 @@
 <body>
     <div class="wrap noselect">
         <div class="difficulty">
-            <div id="plus">+</div>
-            <div id="minus">-</div>
+            <div id="plus" role="button" aria-label="More pads"></div>
+            <div id="minus" role="button" aria-label="Fewer pads"></div>
         </div>
         <div class="info" id='padCounter'></div>
         <div id='suttonButton'>Start<br>Sutton</div>
@@ -24,8 +24,8 @@
 
     <!-- <div class="wrapped noselect" style="visibility: hidden;">     -->
     <div class="wrapped noselect">    
-        <button class='instructions'>Instructions</button>
-        <p>
+        <button class='instructions'>How to play</button>
+        <p class='credit'>
             Photo by <a id="attribution" href="" style="color:black" target="_blank"></a> on 
             <a href="https://unsplash.com/?utm_source=sutton&utm_medium=referral" style="color:black "target="_blank">Unsplash</a>
         </p>
@@ -33,20 +33,24 @@
 
     
 
-    <!-- Closed on load; the Instructions button opens it -->
+    <!-- Closed on load; the How to play button opens it -->
     <div class='modal-bg modal-bg_inactive'>
+        <!-- Framed by a collection photo that isn't on any pad (set in script.js) -->
         <div class='modal' role='dialog' aria-labelledby='modal-title'>
-            <h1 id='modal-title'>Ready up for Sutton, a modern twist on the classic memory game Simon!</h1>
-                <h3>Instructions:</h3>
+            <div class='modal-card'>
+                <button class='modal-close' aria-label='Close'>&times;</button>
+                <h1 id='modal-title'>Ready up for Sutton,<br>a modern twist on&nbsp;Simon!</h1>
+                <!-- &nbsp; keeps each line's last two words together, so none ends on a lone word -->
                 <ul>
-                    <li>Use the plus/minus buttons to preview 6 gameplay difficulty settings</li>
-                    <li>Click on Start Sutton to begin</li>
-                    <li>Memorize Sutton's pattern</li>
-                    <li>Wait for 'your turn' then match Sutton's pattern</li>
-                    <li>See how long you can keep the streak alive!</li>
+                    <li>Use the plus/minus buttons to preview 6 difficulty&nbsp;settings</li>
+                    <li>Click Start&nbsp;Sutton</li>
+                    <li>Memorize Sutton's&nbsp;pattern</li>
+                    <li>Wait for 'Your Turn', then match Sutton's&nbsp;pattern</li>
+                    <li>See how long you can keep the streak&nbsp;alive!</li>
                 </ul>
-                <h2>Will you tactically limit the difficulty to just a few gamepads? Increasing those possibilities might just give you an edge... </h2>
-            <button class='modal-close' aria-label='Close instructions'>&times;</button>
+                <h2>Fewer pads isn't always easier: more pads, Sutton repeats itself&nbsp;less.</h2>
+                <p class='frame-credit'>Frame photo by <a id='frameAttribution' href='' target='_blank'></a> on <a href="https://unsplash.com/?utm_source=sutton&utm_medium=referral" target="_blank">Unsplash</a></p>
+            </div>
         </div>
     </div>
 

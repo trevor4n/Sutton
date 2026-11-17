@@ -24,6 +24,11 @@
     background: rgb(131,58,180);
     background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
 }
+html, body{
+    height: 100%;
+    overflow: hidden; /* the game fits the screen exactly, so it never scrolls (and the browser toolbar stays put) */
+    overscroll-behavior: none;
+}
 body{
     margin: 0; /* ref https://stackoverflow.com/a/46874091 */
 }
@@ -37,6 +42,7 @@ body{
     display: flex;
 
     justify-content: space-evenly;
+    align-items: center; /* pad count, streak and high score line up with the middle of Start */
     text-align: center;
     padding: 2vh;
     height: 20vh;
@@ -47,11 +53,7 @@ body{
     font: 400 4vmin 'Roboto', sans-serif;
     display: flex;
     justify-content: center;
-}
-@media screen and (min-width: 800px){
-    .info{
-        align-items: center;
-    }
+    align-items: center;
 }
 #suttonButton{
     background-color: black;
@@ -67,21 +69,33 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1.05; /* Bebas Neue's default line box sits low; this centers two-line labels */
+    padding-top: 0.08em;
 }
 #plus, #minus{
     visibility: hidden;
     background-color: black;
     color: white;
-    font: 100 3em 'Bebas Neue', sans-serif;
-    text-transform: uppercase;
     border-radius: 50%;
-    
-    /* Center text in circle */
     width: 8vmin;
     height: 8vmin;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    cursor: pointer;
+}
+/* + and - are drawn as bars, centered exactly; font glyphs sit off-center in the circle */
+#plus::before, #minus::before, #plus::after{
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 50%;
+    height: 11%;
+    background: white;
+    border-radius: 1px;
+    transform: translate(-50%, -50%);
+}
+#plus::after{
+    transform: translate(-50%, -50%) rotate(90deg);
 }
 .wrapper{
     display: grid;
@@ -94,8 +108,12 @@ body{
 }
 .wrapped{
     /* justify-content: space-evenly; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
     text-align: right;
-    padding: 2vh;
+    padding: 0 2vh;
     height: 8vh;
     height: 8dvh;
 }
@@ -116,6 +134,9 @@ body{
     text-shadow: 2px 2px 4px black;
     border-style: solid;
     border-color: black;
+    /* Scale the whole photo to fill the pad, centered, instead of showing its top-left corner */
+    background-size: cover;
+    background-position: center;
     /* pointer-events: none; */
 }
 .bright{
@@ -141,21 +162,37 @@ body{
     visibility: visible;
     opacity: 1;
 }
+.wrapped .credit{
+    margin: 0;
+    min-width: 0;
+    white-space: nowrap; /* one line: long names are cut with an ellipsis instead of wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .modal{
     position: relative;
-    background-color: white;
+    /* The photo frame: a spare collection photo (set in script.js), the page gradient until then */
+    background: linear-gradient(90deg, #833ab4, #fd1d1d, #fcb045);
+    background-size: cover;
+    background-position: center;
+    padding: 28px;
+    border-radius: 16px;
     width: 35vw;
     height: fit-content;
     max-height: 90vh;
     max-height: 90dvh; /* taller content scrolls inside instead of running off screen */
     overflow-y: auto;
+    font-family: 'Bebas Neue', sans-serif;
+}
+.modal-card{
+    position: relative;
+    background-color: white;
+    border-radius: 8px;
+    padding: 2vh 1.2em;
     display: flex;
     justify-content: space-around;
     align-items: center;
     flex-direction: column;
-    font-family: 'Bebas Neue', sans-serif;
-    padding: 2vh;
-
 }
 .modal-bg_inactive{
     visibility: hidden;
@@ -164,12 +201,12 @@ body{
 }
 .modal-close{
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 6px;
+    right: 6px;
     font-weight: bold;
     cursor: pointer;
 
-    color: #ccc;
+    color: #888;
     float: right;
     font-size: 30px;
     background: none;
@@ -204,18 +241,52 @@ body{
 .modal h2{
     color: #d8264a; /* background gradient at 35%: 4.9:1 on white */
 }
-.modal h3{
-    color: #b42e78; /* background gradient at 20%: 5.8:1 on white */
-    margin-bottom: 0;
-}
 /* Only the purple-to-red part of the background (0-40%) reaches 4.5:1 on white;
    its orange and gold shades are too light to read there. */
+.modal h1, .modal h2, .modal li{
+    text-wrap: balance; /* evens out line lengths; the &nbsp;s in the HTML also stop lone last words */
+}
 .modal ul{
-    margin-top: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
     font: 400 1rem/1.4 'Roboto', sans-serif; /* mixed case scans faster in a list */
+}
+.modal li{
+    position: relative;
+    padding-left: 1.8em;
+    margin: 0.35em 0;
+}
+/* Fruit bullets */
+.modal li::before{
+    position: absolute;
+    left: 0;
+}
+.modal li:nth-child(1)::before{ content: '🍇'; }
+.modal li:nth-child(2)::before{ content: '🍍'; }
+.modal li:nth-child(3)::before{ content: '🥝'; }
+.modal li:nth-child(4)::before{ content: '🍒'; }
+.modal li:nth-child(5)::before{ content: '🍉'; }
+.frame-credit{
+    margin: 0.5em 0 0;
+    font: 400 0.75rem 'Roboto', sans-serif;
+    color: #555;
+}
+.frame-credit a{
+    color: inherit;
 }
 @media screen and (max-width: 800px){
     .modal{
-        width: 90vw;
+        width: 92vw;
+        padding: 20px;
     }
+    .modal h1{
+        font-size: 1.75rem;
+    }
+    .modal ul{
+        font-size: 0.95rem;
+    }
+}/* "SAYS!" is centered on "SAYS": the thin "!" hangs past the edge instead of pulling the word left */
+#suttonButton .hang{
+    margin-right: -0.21em;
 }
