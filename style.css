@@ -162,12 +162,19 @@ body{
     visibility: visible;
     opacity: 1;
 }
+.wrapped .instructions{
+    flex-shrink: 0; /* the button keeps its size; the credit gets the remaining width */
+    white-space: nowrap;
+}
 .wrapped .credit{
     margin: 0;
     min-width: 0;
-    white-space: nowrap; /* one line: long names are cut with an ellipsis instead of wrapping */
+    font: 400 0.8rem/1.25 'Roboto', sans-serif;
+    /* Small enough that long names fit on up to two lines inside the footer, so nothing is cut off */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 .modal{
     position: relative;
