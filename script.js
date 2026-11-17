@@ -6,6 +6,8 @@ let pc = document.getElementById('padCounter')
 let attribute = document.getElementById('attribution')
 let modalClose = document.querySelector('.modal-close')
 let modalBG = document.querySelector('.modal-bg')
+let modal = document.querySelector('.modal')
+let frameAttribute = document.getElementById('frameAttribution')
 let instructions = document.querySelector('.instructions')
 
 let padCount = 0
@@ -25,11 +27,81 @@ let fruitBundle = []
 pc.style.visibility = 'hidden'
 pc.innerText = `Number\nof pads: ${grid[gameplayDifficulty]}`
 
-modalClose.addEventListener('click', () => { modalBG.classList.add('modal-bg_inactive') })
+// Opening the pop-up adds a browser history entry, so a phone's back button closes it
+// instead of leaving the game. Every way of closing it goes back through that entry.
+function openInstructions(){
+    if(!modalBG.classList.contains('modal-bg_inactive')){ return }
+    frameWithSparePhoto()
+    modalBG.classList.remove('modal-bg_inactive')
+    history.pushState({ instructions: true }, '')
+}
+function closeInstructions(){
+    if(modalBG.classList.contains('modal-bg_inactive')){ return }
+    if(history.state && history.state.instructions){ history.back() } // the popstate handler hides it
+    else { modalBG.classList.add('modal-bg_inactive') }
+}
+window.addEventListener('popstate', () => {
+    modalBG.classList.toggle('modal-bg_inactive', !(history.state && history.state.instructions))
+})
+if(history.state && history.state.instructions){ history.replaceState(null, '') } // reloaded with it open
+
+instructions.addEventListener('click', openInstructions)
+modalClose.addEventListener('click', closeInstructions)
 // A tap on the dimmed area outside the pop-up, or Escape, also closes it
-modalBG.addEventListener('click', (event) => { if(event.target === modalBG){ modalBG.classList.add('modal-bg_inactive') } })
-document.addEventListener('keydown', (event) => { if(event.key === 'Escape'){ modalBG.classList.add('modal-bg_inactive') } })
-instructions.addEventListener('click', () => { modalBG.classList.remove('modal-bg_inactive') })
+modalBG.addEventListener('click', (event) => { if(event.target === modalBG){ closeInstructions() } })
+document.addEventListener('keydown', (event) => { if(event.key === 'Escape'){ closeInstructions() } })
+
+// Frame the pop-up with a collection photo that isn't on a pad right now. Pads use the
+// first grid-size photos in order, so any later one is off screen. Credited like the pads.
+function frameWithSparePhoto(){
+    let onPads = grid[gameplayDifficulty]
+    if(fruitBundle.length <= onPads){ return } // photos not loaded yet: the CSS gradient frame shows
+    let spare = fruitBundle.map((photo, i) => i).filter((i) => i >= onPads)
+    // Prefer photos whose edges are fruit: a frame only shows a photo's border
+    let colorful = spare.filter((i) => frameScores[i] >= 0.6)
+    let pick = colorful.length ? colorful : spare
+    let photo = fruitBundle[pick[Math.floor(Math.random() * pick.length)]]
+    modal.style.backgroundImage = 'url("' + sizedPhoto(photo, 800) + '")'
+    frameAttribute.innerText = photo.user.name
+    frameAttribute.href = photo.links.html
+}
+
+// Many collection photos are fruit on a plain white or black background, which makes a blank frame.
+// Once the photos load, score each by the share of colorful pixels in its outer border, using a
+// tiny 32px copy (Unsplash's image server allows reading the pixels).
+let frameScores = {}
+function scoreFramePhotos(){
+    fruitBundle.forEach((photo, i) => {
+        let img = new Image()
+        img.crossOrigin = 'anonymous'
+        img.onload = () => {
+            let canvas = document.createElement('canvas')
+            canvas.width = canvas.height = 32
+            let ctx = canvas.getContext('2d')
+            ctx.drawImage(img, 0, 0, 32, 32)
+            let d = ctx.getImageData(0, 0, 32, 32).data, colorful = 0, total = 0
+            for(let y = 0; y < 32; y++){
+                for(let x = 0; x < 32; x++){
+                    if(x >= 5 && x < 27 && y >= 5 && y < 27){ continue } // border band only
+                    let k = (y * 32 + x) * 4
+                    let chroma = Math.max(d[k], d[k + 1], d[k + 2]) - Math.min(d[k], d[k + 1], d[k + 2])
+                    if(chroma >= 40){ colorful++ } // white, grey and black backgrounds have little chroma
+                    total++
+                }
+            }
+            frameScores[i] = colorful / total
+        }
+        img.src = sizedPhoto(photo, 64)
+    })
+}
+
+// Unsplash image URLs resize on request: ask for a width that stays sharp at the size shown
+function sizedPhoto(photo, width){
+    let url = new URL(photo.urls.thumb)
+    url.searchParams.set('w', width)
+    url.searchParams.set('auto', 'format')
+    return url.href
+}
 
 pb.addEventListener('click', () => {
     if(gameplayDifficulty < grid.length - 1){
@@ -70,7 +142,8 @@ function grabSomeFruit(){
         console.log('retrieved ' + fruitBundle.length + ' records from the dataset!')
         // console.log(fruitBundle)
         state = 'landing'
-        console.log(genGrid())        
+        console.log(genGrid())
+        scoreFramePhotos()        
         pb.style.visibility = 'visible'
         mb.style.visibility = 'visible'
         pc.style.visibility = 'visible'
@@ -103,18 +176,16 @@ function genGrid(){
             cell.id = id
             pads.push(cell)
 
-            let src = fruitBundle[padCount++].urls.thumb + '&auto=format&q=80' 
-            cell.style = "background-image: url(" + src + ');'
+            // 400px wide so the whole photo stays sharp when scaled to fill the pad (see .grid-item)
+            cell.style = 'background-image: url("' + sizedPhoto(fruitBundle[padCount++], 400) + '");'
 
             let lnk = fruitBundle[padCount - 1].links.html
             let nme = fruitBundle[padCount - 1].user.name
-            cell.setAttribute('data-value',lnk)
 
+            // Pads only take game input; the photo credit below links to Unsplash
             cell.addEventListener('click', (event) => {
                 if(state == 'input-phase' ){
                     padIn(event.currentTarget)
-                } else if(state === 'gathering' || state === 'game-over' || state === 'play-again'){
-                    frozenFruit(event.currentTarget)
                 }
             })
 
@@ -147,7 +218,7 @@ async function suttonButton(){
     score = 0
     setStreak(score)
     gameSeq = []
-    sb.innerText = 'Sutton\nSays!'
+    sb.innerHTML = '<span>Sutton<br>Says<span class="hang">!</span></span>'
 
     if(state == 'landing'){
         setHighScore(0)
@@ -165,7 +236,7 @@ async function gameSequence(){
     state = 'game-sequence'
     let rand = Math.floor(Math.random() * grid[gameplayDifficulty])
     gameSeq.push(pads[rand])
-    sb.innerText = 'Sutton\nSays!'
+    sb.innerHTML = '<span>Sutton<br>Says<span class="hang">!</span></span>'
     // console.log('gameSeq::',gameSeq)
     for(let g of gameSeq){
         let active = await suttonShow(g) //FIX
@@ -195,6 +266,7 @@ async function padIn(p){
             await suttonShow(p)
             .then((act) => {
             // suttonShow(p, function(act){
+                if(state !== 'input-phase'){ return } // a quicker wrong press already ended the game
                 let pExpected = gameSeq[l-1]
                 if(playerSeq[l-1].id === pExpected.id){
                     //console.log('Player pad match')
@@ -231,13 +303,6 @@ function gameOver(p, pExpected){
 
         state = 'play-again'
     }, 2500)
-}
-
-function frozenFruit(p){
-    // Cut the new tab's handle back to this one (window.opener) so the opened page can't redirect it.
-    // Done this way rather than with a 'noopener' feature string, which some browsers treat as a request for a popup window.
-    let tab = window.open(p.getAttribute('data-value'), '_blank')
-    if(tab){ tab.opener = null }
 }
 
 function setStreak(s){
