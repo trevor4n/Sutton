@@ -56,11 +56,11 @@ document.addEventListener('keydown', (event) => { if(event.key === 'Escape'){ cl
 function frameWithSparePhoto(){
     let onPads = grid[gameplayDifficulty]
     if(fruitBundle.length <= onPads){ return } // photos not loaded yet: the CSS gradient frame shows
-    let spare = fruitBundle.map((photo, i) => i).filter((i) => i >= onPads)
+    let spare = fruitBundle.slice(onPads)
     // Prefer photos whose edges are fruit: a frame only shows a photo's border
-    let colorful = spare.filter((i) => frameScores[i] >= 0.6)
+    let colorful = spare.filter((photo) => photo.frameScore >= 0.6)
     let pick = colorful.length ? colorful : spare
-    let photo = fruitBundle[pick[Math.floor(Math.random() * pick.length)]]
+    let photo = pick[Math.floor(Math.random() * pick.length)]
     modal.style.backgroundImage = 'url("' + sizedPhoto(photo, 800) + '")'
     frameAttribute.innerText = photo.user.name
     frameAttribute.href = photo.links.html
@@ -69,9 +69,8 @@ function frameWithSparePhoto(){
 // Many collection photos are fruit on a plain white or black background, which makes a blank frame.
 // Once the photos load, score each by the share of colorful pixels in its outer border, using a
 // tiny 32px copy (Unsplash's image server allows reading the pixels).
-let frameScores = {}
 function scoreFramePhotos(){
-    fruitBundle.forEach((photo, i) => {
+    fruitBundle.forEach((photo) => {
         let img = new Image()
         img.crossOrigin = 'anonymous'
         img.onload = () => {
@@ -89,7 +88,7 @@ function scoreFramePhotos(){
                     total++
                 }
             }
-            frameScores[i] = colorful / total
+            photo.frameScore = colorful / total // kept on the photo, so reshuffling doesn't mix scores up
         }
         img.src = sizedPhoto(photo, 64)
     })
@@ -142,6 +141,7 @@ function grabSomeFruit(){
         console.log('retrieved ' + fruitBundle.length + ' records from the dataset!')
         // console.log(fruitBundle)
         state = 'landing'
+        shuffleFruit()
         console.log(genGrid())
         scoreFramePhotos()        
         pb.style.visibility = 'visible'
@@ -150,6 +150,17 @@ function grabSomeFruit(){
     })
 }
 grabSomeFruit()
+
+// Pads show the first photos in fruitBundle; the collection lists similar fruit back to back,
+// so shuffle the whole list (Fisher-Yates) on load and after each game for a fresh mix
+function shuffleFruit(){
+    for(let i = fruitBundle.length - 1; i > 0; i--){
+        let j = Math.floor(Math.random() * (i + 1))
+        let swap = fruitBundle[i]
+        fruitBundle[i] = fruitBundle[j]
+        fruitBundle[j] = swap
+    }
+}
 
 function genGrid(){
     // console.log('generating grid ⏳⏳⌛')
@@ -301,6 +312,8 @@ function gameOver(p, pExpected){
         pb.style.visibility = 'visible'
         mb.style.visibility = 'visible'
 
+        shuffleFruit() // new fruit for the next game
+        genGrid()
         state = 'play-again'
     }, 2500)
 }
