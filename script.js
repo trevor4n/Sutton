@@ -26,6 +26,9 @@ pc.style.visibility = 'hidden'
 pc.innerText = `Number\nof pads: ${grid[gameplayDifficulty]}`
 
 modalClose.addEventListener('click', () => { modalBG.classList.add('modal-bg_inactive') })
+// A tap on the dimmed area outside the pop-up, or Escape, also closes it
+modalBG.addEventListener('click', (event) => { if(event.target === modalBG){ modalBG.classList.add('modal-bg_inactive') } })
+document.addEventListener('keydown', (event) => { if(event.key === 'Escape'){ modalBG.classList.add('modal-bg_inactive') } })
 instructions.addEventListener('click', () => { modalBG.classList.remove('modal-bg_inactive') })
 
 pb.addEventListener('click', () => {
