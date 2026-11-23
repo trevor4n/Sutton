@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Fetch both fonts right away instead of after the CSS is parsed -->
+    <link rel="preload" href="fonts/bebas-neue-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/roboto-latin-400.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="style.css">
     <title>Sutton</title>
 </head>
@@ -12,10 +15,11 @@
             <div id="plus" role="button" aria-label="More pads"></div>
             <div id="minus" role="button" aria-label="Fewer pads"></div>
         </div>
-        <div class="info" id='padCounter'></div>
         <div id='suttonButton'>Start<br>Sutton</div>
-        <div class='info' id="streak"></div>
-        <div class='info' id="highScore"></div>
+        <div class="scores">
+            <div class='info' id="streak"></div>
+            <div class='info' id="highScore"></div>
+        </div>
     </div>
 
     <div class="wrapper noselect">    

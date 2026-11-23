@@ -2,7 +2,6 @@ let sb = document.getElementById('suttonButton')
 let wrapper = document.querySelector('.wrapper')
 let pb = document.getElementById('plus')
 let mb = document.getElementById('minus')
-let pc = document.getElementById('padCounter')
 let attribute = document.getElementById('attribution')
 let modalClose = document.querySelector('.modal-close')
 let modalBG = document.querySelector('.modal-bg')
@@ -24,8 +23,6 @@ let grid = [4, 6, 8, 9, 12, 16]
 let gameplayDifficulty = 0
 let fruitBundle = []
 
-pc.style.visibility = 'hidden'
-pc.innerText = `Number\nof pads: ${grid[gameplayDifficulty]}`
 
 // Opening the pop-up adds a browser history entry, so a phone's back button closes it
 // instead of leaving the game. Every way of closing it goes back through that entry.
@@ -107,7 +104,6 @@ pb.addEventListener('click', () => {
         gameplayDifficulty++
         console.log(genGrid())
     }
-    updateNumberOfPads()
 })
 
 mb.addEventListener('click', () => {
@@ -115,7 +111,6 @@ mb.addEventListener('click', () => {
         gameplayDifficulty--
         console.log(genGrid())
     }
-    updateNumberOfPads()
 })
 
 function grabSomeFruit(){
@@ -146,7 +141,7 @@ function grabSomeFruit(){
         scoreFramePhotos()        
         pb.style.visibility = 'visible'
         mb.style.visibility = 'visible'
-        pc.style.visibility = 'visible'
+        revealWhenReady()
     })
 }
 grabSomeFruit()
@@ -322,8 +317,17 @@ function setStreak(s){
     document.getElementById('streak').innerText = `Streak\n${s}`
 }
 
-function updateNumberOfPads(){
-    pc.innerText = `Number\nof pads: ${grid[gameplayDifficulty]}`
+// Show the top bar and pads only once the fonts and every pad photo have loaded, so the first
+// thing a player sees is the finished game. Capped at 4 seconds so a slow photo can't block play.
+function revealWhenReady(){
+    let photos = pads.map((pad) => new Promise((resolve) => {
+        let img = new Image()
+        img.onload = img.onerror = resolve
+        img.src = pad.style.backgroundImage.slice(5, -2) // url("...") -> ...
+    }))
+    let giveUp = new Promise((resolve) => setTimeout(resolve, 4000))
+    Promise.race([Promise.all([document.fonts.ready, ...photos]), giveUp])
+        .then(() => document.body.classList.add('ready'))
 }
 
 function setHighScore(s){
