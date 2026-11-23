@@ -5,7 +5,8 @@
   "main": "script.js",
   "scripts": {
     "netlify": "npx netlify-cli",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "monogram": "node scripts/fetch-monogram.mjs"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/trevor4n/Sutton/issues"
   },
-  "homepage": "https://github.com/trevor4n/Sutton#readme"
+  "homepage": "https://github.com/trevor4n/Sutton#readme",
+  "tunMonogram": {
+    "version": "1.2.0",
+    "sha256": "fac6c0a9f9a22eaa9ae3297164c9fc056d5b136fee2157cb4c0a62108dbe8bad"
+  }
 }
