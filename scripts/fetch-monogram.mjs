@@ -1,4 +1,4 @@
-// Downloads the pinned tun-monogram release (the 3D TN monogram shown in the top bar on
+// Downloads the pinned tun-monogram release (the 3D monogram shown in the top bar on
 // desktop) from the private trevor4n/tun-monogram repo into ./tun-monogram/, which is
 // gitignored and published with the rest of the site at /tun-monogram/.
 //

@@ -146,7 +146,7 @@ function grabSomeFruit(){
 }
 grabSomeFruit()
 
-// The TN monogram, desktop only: phones have no room for it and never download it.
+// The monogram, desktop only: phones have no room for it and never download it.
 // It comes from the tun-monogram release that the deploy downloads into /tun-monogram/
 // (see scripts/fetch-monogram.mjs). If those files are missing, as when opening
 // index.html straight from the repo, the import fails and the game carries on without it.

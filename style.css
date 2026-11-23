@@ -54,7 +54,7 @@ body{
     align-items: center;
     width: 100%;
 }
-/* The TN monogram (desktop only, added by script.js). Its 3D canvas overhangs this box a little. */
+/* The monogram (desktop only, added by script.js). Its 3D canvas overhangs this box a little. */
 tun-monogram{
     height: 9vmin;
     cursor: pointer;
