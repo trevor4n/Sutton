@@ -208,10 +208,10 @@ function genGrid(){
             })
 
             cell.addEventListener('mouseover', () => {
-                let w = document.getElementsByClassName('wrapped')[0]
-                w.style.setProperty("visibility", "visible")
                 attribute.innerText = nme
                 attribute.href = lnk
+                // the credit stays hidden until it has a photographer to name
+                document.querySelector('.credit').classList.add('is-shown')
             })
         }
     }

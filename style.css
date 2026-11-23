@@ -231,6 +231,10 @@ body.ready .wrap, body.ready .wrapper, body.ready .wrapped{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
+    visibility: hidden; /* shown from the first time a pad is hovered or tapped (script.js) */
+}
+.wrapped .credit.is-shown{
+    visibility: visible;
 }
 .modal{
     position: relative;
