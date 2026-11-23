@@ -48,6 +48,22 @@ body{
     height: 20vh;
     height: 20dvh; /* dvh excludes mobile browser toolbars; vh above is the fallback */
 }
+.controls{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+}
+/* The monogram (desktop only, added by script.js). Its 3D canvas overhangs this box a little. */
+trevs-monogram{
+    height: 9vmin;
+    cursor: pointer;
+}
+@media screen and (max-width: 800px){
+    trevs-monogram{
+        display: none;
+    }
+}
 /* The top bar, pads and footer fade in together once fonts, photo list and pad photos are ready
    (script.js adds .ready), so nothing shows half-loaded or jumps around */
 .wrap, .wrapper, .wrapped{

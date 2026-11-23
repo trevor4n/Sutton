@@ -1,5 +1,8 @@
 .jshintrc
 node_modules/ 
+
+# the trevs-monogram release, downloaded by scripts/fetch-monogram.mjs
+/trevs-monogram/
 .env
 .netlify
 

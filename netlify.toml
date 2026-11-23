@@ -1,7 +1,7 @@
 [build]
-  # Nothing to build: the site is served as committed and Netlify bundles the function itself.
-  # Kept as an explicit no-op so a build command set in the Netlify UI can't take over.
-  command = "echo 'No build step'"
+  # The site is served as committed and Netlify bundles the function itself. The one build
+  # step downloads the monogram (private trevs-monogram repo) into ./trevs-monogram/.
+  command = "node scripts/fetch-monogram.mjs"
   functions = "/functions"
   publish = "."
 
