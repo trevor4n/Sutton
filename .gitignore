@@ -1,5 +1,8 @@
 .jshintrc
 node_modules/ 
+
+# the tun-monogram release, downloaded by scripts/fetch-monogram.mjs
+/tun-monogram/
 .env
 .netlify
 

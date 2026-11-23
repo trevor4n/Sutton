@@ -146,6 +146,18 @@ function grabSomeFruit(){
 }
 grabSomeFruit()
 
+// The TN monogram, desktop only: phones have no room for it and never download it.
+// It comes from the tun-monogram release that the deploy downloads into /tun-monogram/
+// (see scripts/fetch-monogram.mjs). If those files are missing, as when opening
+// index.html straight from the repo, the import fails and the game carries on without it.
+if(window.matchMedia('(min-width: 801px)').matches){
+    import('./tun-monogram/tun-monogram.js').then(() => {
+        let monogram = document.createElement('tun-monogram')
+        monogram.setAttribute('wait-for', 'body.ready') // build the 3D model only once the game is on screen
+        document.querySelector('.controls').prepend(monogram)
+    }).catch(() => { console.log('monogram not available') })
+}
+
 // Pads show the first photos in fruitBundle; the collection lists similar fruit back to back,
 // so shuffle the whole list (Fisher-Yates) on load and after each game for a fresh mix
 function shuffleFruit(){
